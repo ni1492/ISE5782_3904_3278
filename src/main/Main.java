@@ -1,3 +1,12 @@
+/**
+ * i.d. 214763278 
+ * name: Noga Ilan 
+ * email: noga.eden.ilan@gmail.com
+ * 
+ * i.d. 326083904 
+ * name: Noa Friedman 
+ * email: fencemegirl@gmail.com
+ */
 package main;
 import static java.lang.System.out;
 import static primitives.Util.*;

@@ -1,8 +1,17 @@
 package primitives;
 
+/**
+ * class vector - primitive.
+ *
+ */
 public class Vector extends Point
 {
-
+	/**
+	 * vector class constructor - receives three points
+	 * @param x - point x
+	 * @param y - point y
+	 * @param z - point z
+	 */
 	public Vector(double x, double y, double z) 
 	{
 		super(x, y, z);
@@ -10,6 +19,11 @@ public class Vector extends Point
 			throw new IllegalArgumentException("Vector(0,0,0) is not allowed");	
 		
 	}
+	
+	/**
+	 * vector class constructor - receives three points
+	 * @param xyz - Double3 point
+	 */
 	public Vector(Double3 xyz) 
 	{
 		super(xyz);
@@ -34,11 +48,19 @@ public class Vector extends Point
 	@Override
 	public String toString() { return "->" + super.toString(); }
 	
+	/**
+	 * add function - receives a vector and returns the addition of the current vector and the new vector.
+	 */
 	public Vector add(Vector vector)
 	{
 		return new Vector(xyz.add(vector.xyz));
 	}
 	
+	/**
+	 * scale function
+	 * @param scaler receives a number
+	 * @return returns the vector after multiplying each of the values in it with the number received
+	 */
 	public Vector scale(double scaler)
 	{
 		try
@@ -51,6 +73,11 @@ public class Vector extends Point
 		}
 	}
 	
+	/**
+	 * dot product function
+	 * @param other receives another vector
+	 * @return returns a number - the dot product of the two vectors
+	 */
 	public double dotProduct (Vector other)
 	{
 		double d1=other.xyz.d1;
@@ -60,6 +87,11 @@ public class Vector extends Point
 		return (xyz.d1*d1+xyz.d2*d2+xyz.d3*d3);
 	}
 	
+	/**
+	 * cross product function
+	 * @param other receives another vector
+	 * @return returns a vector - the cross product of the two vectors
+	 */
 	public Vector crossProduct(Vector other)
 	{
 		double x1 = xyz.d1;
@@ -74,16 +106,28 @@ public class Vector extends Point
         return new Vector(i, j, k);
 	}
 	
+	/**
+	 * length squared function
+	 * @return returns the squared length of the vector
+	 */
 	public double lengthSquared()
 	{
 		return (xyz.d1)*(xyz.d1)+(xyz.d2)*(xyz.d2)+(xyz.d3)*(xyz.d3);
 	}
 	
+	/**
+	 * length function
+	 * @return returns the length of the vector
+	 */
 	public double length()
 	{
 		return Math.sqrt(this.lengthSquared());
 	}
 	
+	/**
+	 * normalize function 
+	 * @return returns the normalized vector (length=1)
+	 */
 	public Vector normalize()
 	{
 		return new Vector(this.xyz.reduce(this.length()));

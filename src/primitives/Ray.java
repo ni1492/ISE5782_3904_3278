@@ -2,6 +2,10 @@ package primitives;
 
 import java.util.Objects;
 
+/**
+ * ray class - primitive
+ *
+ */
 public class Ray 
 {
 	final Point p0;
@@ -24,6 +28,11 @@ public class Ray
 		return  p0.toString() + dir.toString();
 	}
 
+	/**
+	 * ray class constructor
+	 * @param p0 receives a point
+	 * @param dir receives a vector
+	 */
 	public Ray(Point p0, Vector dir) 
 	{
 		this.p0 = p0;
