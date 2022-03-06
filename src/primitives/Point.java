@@ -16,11 +16,6 @@ public class Point
 		this.xyz= new Double3(x,y,z);
 	}
 
-	public Double3 getXyz() 
-	{
-		return xyz;
-	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -39,5 +34,24 @@ public class Point
 		return  xyz.toString();
 	}
 
+	public Point add(Vector vector)
+	{
+		return new Point (this.xyz.add(vector.xyz));
+	}
 	
+	public Vector subtract(Point point)
+	{
+		return new Vector (this.xyz.subtract(point.xyz));
+	}
+	public double distanceSquared(Point other)
+	{
+		double d1=other.xyz.d1;
+		double d2=other.xyz.d2;
+		double d3=other.xyz.d3;
+		return (d1-xyz.d1)*(d1-xyz.d1)+(d2-xyz.d2)*(d2-xyz.d2)+(d3-xyz.d3)*(d3-xyz.d3);
+	}
+	public double distance(Point other)
+	{
+		return Math.sqrt(this.distanceSquared(other));
+	}
 }
