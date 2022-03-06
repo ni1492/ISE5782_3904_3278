@@ -6,14 +6,14 @@ public class Vector extends Point
 	public Vector(double x, double y, double z) 
 	{
 		super(x, y, z);
-		if(this.equals(Double3.ZERO))
+		if(this.xyz.equals(Double3.ZERO))
 			throw new IllegalArgumentException("Vector(0,0,0) is not allowed");	
 		
 	}
 	public Vector(Double3 xyz) 
 	{
 		super(xyz);
-		if(this.equals(Double3.ZERO))
+		if(this.xyz.equals(Double3.ZERO))
 			throw new IllegalArgumentException("Vector(0,0,0) is not allowed");	
 
 	}
