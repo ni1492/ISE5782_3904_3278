@@ -26,8 +26,16 @@ public class Plane implements Geometry
 	public Plane(Point q0,Point q1,Point q2) 
 	{
 		this.q0 = q0;
-		//Vector a=q1.subtract(q0);
-		//Vector b=q2.subtract(q0);
+		Vector a=q1.subtract(q0);
+		Vector b=q2.subtract(q0);
+		try
+		{
+			a.crossProduct(b);//check if the points can create a plane
+		}
+		catch(IllegalArgumentException e)
+		{
+			throw new IllegalArgumentException("A plane can't be created because all the points are on the same ray");
+		}
 		//this.normal =(a.crossProduct(b)).normalize();
 		this.normal=null;
 	}

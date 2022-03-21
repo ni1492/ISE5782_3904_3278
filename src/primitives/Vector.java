@@ -94,6 +94,8 @@ public class Vector extends Point
 	 */
 	public Vector crossProduct(Vector other)
 	{
+		if(((this.xyz.d1/other.xyz.d1)==(this.xyz.d2/other.xyz.d2))&&((this.xyz.d1/other.xyz.d1)==(this.xyz.d3/other.xyz.d3)))
+			throw new IllegalArgumentException("the vectors are parallel- cannot calculate crossProduct");
 		double x1 = xyz.d1;
         double x2 = other.xyz.d1;
         double y1 = xyz.d2;
