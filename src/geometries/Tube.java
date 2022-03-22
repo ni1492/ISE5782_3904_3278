@@ -6,7 +6,17 @@ public class Tube implements Geometry
 	final double radius;
 	public Vector getNormal(Point point)
 	{
-		return null;
+		
+		Vector v=point.subtract(this.axisRay.getPoint());
+		
+		if(v.dotProduct(this.axisRay.getDir())==0)
+		{
+			return v.normalize();
+		}
+		double t=this.axisRay.getDir().dotProduct(v);
+		Point o=this.axisRay.getPoint().add(this.axisRay.getDir().scale(t));
+		Vector normal=(point.subtract(o)).normalize();
+		return normal;
 	}
 	public Tube(Ray axisRay, double radius) 
 	{

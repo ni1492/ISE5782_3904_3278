@@ -28,6 +28,9 @@ public class Plane implements Geometry
 		this.q0 = q0;
 		Vector a=q1.subtract(q0);
 		Vector b=q2.subtract(q0);
+		if(q0==q1 ||q0==q2 ||q1==q2)
+			throw new IllegalArgumentException("A plane can't be created because there are only two different points");
+
 		try
 		{
 			a.crossProduct(b);//check if the points can create a plane
@@ -36,8 +39,8 @@ public class Plane implements Geometry
 		{
 			throw new IllegalArgumentException("A plane can't be created because all the points are on the same ray");
 		}
-		//this.normal =(a.crossProduct(b)).normalize();
-		this.normal=null;
+		this.normal =(a.crossProduct(b)).normalize();
+		//this.normal=null;
 	}
 	/**
 	 * get normal function -implements geometry getNormal function
@@ -45,7 +48,7 @@ public class Plane implements Geometry
 	 */
 	public Vector getNormal(Point point)
 	{
-		return null;
+		return this.getNormal();
 	}
 
 	@Override

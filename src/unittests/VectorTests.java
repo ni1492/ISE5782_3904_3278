@@ -122,7 +122,7 @@ class VectorTests {
 		assertEquals(normal.length(),1,"ERROR: Vector.normalize() the normalized vector is not a unit vector");
 		// TC02: Test that the normal vector is parallel to the original one
 		assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(normal),"ERROR: Vector.normalize() the normalized vector is not parallel to the original one");
-		// TC02: Test that the normal vector is not opposite to the original one
+		// TC03: Test that the normal vector is not opposite to the original one
 		assertTrue(v1.dotProduct(normal)>0,"ERROR: Vector.normalize() the normalized vector is opposite to the original one");
 
 	}

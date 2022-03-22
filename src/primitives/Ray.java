@@ -27,7 +27,14 @@ public class Ray
 	public String toString() {
 		return  p0.toString() + dir.toString();
 	}
-
+	public Vector getDir()
+	{
+		return dir;
+	}
+	public Point getPoint()
+	{
+		return p0;
+	}
 	/**
 	 * ray class constructor
 	 * @param p0 receives a point
