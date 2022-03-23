@@ -11,7 +11,9 @@ public class Tube implements Geometry
 		
 		if(v.dotProduct(this.axisRay.getDir())==0)
 		{
-			return v.normalize();
+			throw new IllegalArgumentException("The point is parallel to the starting point of the ray");
+
+			//return v.normalize();
 		}
 		double t=this.axisRay.getDir().dotProduct(v);
 		Point o=this.axisRay.getPoint().add(this.axisRay.getDir().scale(t));

@@ -35,7 +35,22 @@ public class Cylinder extends Tube
 	@Override
 	public Vector getNormal(Point point)
 	{
-		return null;
-	}
+		Vector v=point.subtract(this.axisRay.getPoint());
+		double t=this.axisRay.getDir().dotProduct(v);
+		Point o=this.axisRay.getPoint().add(this.axisRay.getDir().scale(t));
+
+		if(v.dotProduct(this.axisRay.getDir())==0 ||t==this.getHeight())
+		{
+			if(point.subtract(o).length()==this.getRadius())//Boundary case
+			{
+				throw new IllegalArgumentException("The point is on the edge of the cylinder");
+
+			}
+			else
+				return v.normalize();
+		}
+		Vector normal=(point.subtract(o)).normalize();
+		return normal;	
+		}
 	
 }
