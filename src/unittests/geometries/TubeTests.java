@@ -25,9 +25,7 @@ class TubeTests {
 		assertEquals(tube.getNormal(new Point(5,0,1)),new Vector(1,0,0),"ERROR: Tube.getNormal() does not work correctly");
         // =============== Boundary Values Tests ==================
 		 //TC02: Test that the result of the normal vector of the point is proper when the point is parallel to the starting point of the ray
-		assertThrows(IllegalArgumentException.class,
-				() -> tube.getNormal(new Point(5,0,0)), "ERROR: Tube.getNormal() does not work correctly");
-		//assertEquals(tube.getNormal(p),new Vector(1,0,0),"ERROR: Tube.getNormal() does not work correctly");
+		assertEquals(tube.getNormal(new Point(5,0,0)),new Vector(1,0,0),"ERROR: Tube.getNormal() does not work correctly");
 
 	}
 
