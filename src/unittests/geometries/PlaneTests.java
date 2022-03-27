@@ -40,7 +40,7 @@ class PlaneTests {
 		Vector normal2=new Vector(-1,0,0);
 		Vector result=plane.getNormal(p);
 		 //TC01: Test that the result of the normal vector of the point is proper 
-		assertTrue(result==normal1 || result==normal2,"ERROR: Plane.getNormal() does not work correctly");
+		assertTrue(result.equals(normal1) || result.equals(normal2),"ERROR: Plane.getNormal() does not work correctly");
 	
 		//Vector normal=plane.getNormal(p);
 		// TC01: Test that the normal vector is a unit vector 

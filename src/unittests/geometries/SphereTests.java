@@ -25,7 +25,7 @@ class SphereTests {
 		Point p=new Point(0,0,4);
 		Vector normal=new Vector(0,0,1);
 		// TC01: Test that the result of the normal vector of the point is proper 
-		assertEquals(s.getNormal(p),normal,"ERROR: Sphere.getNormal() does not work correctly");
+		assertEquals(normal,s.getNormal(p),"ERROR: Sphere.getNormal() does not work correctly");
 
 }
 
