@@ -50,7 +50,7 @@ public class Triangle extends Polygon
 			v1=point.subtract(b);
 			v2=point.subtract(c);
 		}
-return null;
+return v1.crossProduct(v2);
 
 		
 

@@ -62,9 +62,9 @@ class PointTests {
 	@Test
 	void testDistance() {
 		// ============ Equivalence Partitions Tests ==============
-		Point p1=new Point(2,6,2);
-		Point p2=new Point(2,2,-6);
-		Double result=2.0;
+		Point p1=new Point(2,3,2);
+		Point p2=new Point(2,1,-4);
+		Double result=Math.sqrt(40);
 		// TC01: Test that the calculation of the distance between two Points is proper 
 		assertEquals(p1.distance(p2),result,"ERROR: Point.distance() wrong value");
 	}

@@ -37,13 +37,15 @@ public class Cylinder extends Tube
 	{
 		Vector v=point.subtract(this.axisRay.getPoint());
 		double t=this.axisRay.getDir().dotProduct(v);
-		Point o=this.axisRay.getPoint().add(this.axisRay.getDir().scale(t));
-
-		if(v.dotProduct(this.axisRay.getDir())==0 || //the point is on the bottom
-				(t==this.getHeight() && (o.subtract(this.axisRay.getPoint()).normalize()==this.axisRay.getDir())))
-			//the point is on the top- need to check the direction to confirm that its not on the opposite side
+		if(v.dotProduct(this.axisRay.getDir())==0)//the point is on the bottom		
 		{
-			return v.normalize();
+			return this.axisRay.getDir();
+		}
+		Point o=this.axisRay.getPoint().add(this.axisRay.getDir().scale(t));
+		Vector test=o.subtract(this.axisRay.getPoint()).normalize();
+		if((t==this.getHeight()) && (test.equals(this.axisRay.getDir())))//the point is on the top- need to check the direction to confirm that its not on the opposite side
+		{
+			return this.axisRay.getDir();
 		}
 		Vector normal=(point.subtract(o)).normalize();
 		return normal;	
