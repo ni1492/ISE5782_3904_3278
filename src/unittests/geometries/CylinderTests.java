@@ -38,5 +38,10 @@ class CylinderTests {
 		assertEquals(cyl.getNormal(new Point(-5,0,0)),new Vector(0,0,1), "ERROR: Cylinder.getNormal() does not work correctly");
 		*/
 	}
+	@Test
+	void testFindIntersections()
+	{
+		
+	}
 
 }

@@ -97,4 +97,11 @@ public class Point
 	{
 		return Math.sqrt(this.distanceSquared(other));
 	}
+	/**
+	 * get function for xyz field 
+	 * @return xyz - type Double3
+	 */
+	public Double3 getXyz() {
+		return xyz;
+	}
 }

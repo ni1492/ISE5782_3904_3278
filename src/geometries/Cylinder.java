@@ -1,4 +1,6 @@
 package geometries;
+import java.util.List;
+
 import primitives.*;
 /**
  * class Cylinder - geometric shape. inherits from class tube. 
@@ -50,5 +52,9 @@ public class Cylinder extends Tube
 		Vector normal=(point.subtract(o)).normalize();
 		return normal;	
 		}
+	@Override
+	public List<Point> findIntersections(Ray ray) {
+		return null;
+	}
 	
 }

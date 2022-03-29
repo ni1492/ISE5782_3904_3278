@@ -49,5 +49,10 @@ class PlaneTests {
 		//assertThrows(IllegalArgumentException.class, () -> normal.crossProduct(new Vector(1,0,0)),"ERROR: Plane.getNormal() the normalized vector is not parallel to the original one");
 		
 	}
+	@Test
+	void testFindIntersections()
+	{
+		
+	}
 
 }

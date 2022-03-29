@@ -1,4 +1,6 @@
 package geometries;
+import java.util.List;
+
 import primitives.*;
 /**
  * 
@@ -49,6 +51,11 @@ public class Sphere implements Geometry
 	{
 		return point.subtract(this.getCenter()).normalize();
 }
+
+	@Override
+	public List<Point> findIntersections(Ray ray) {
+		return null;
+	}
 	
 	
 }

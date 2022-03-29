@@ -1,4 +1,6 @@
 package geometries;
+import java.util.List;
+
 import primitives.*;
 /**
  * class plane - geometric shape, implements geometry interface.
@@ -70,6 +72,10 @@ public class Plane implements Geometry
 	 */
 	public Vector getNormal() {
 		return normal;
+	}
+	@Override
+	public List<Point> findIntersections(Ray ray) {
+		return null;
 	}
  
 }
