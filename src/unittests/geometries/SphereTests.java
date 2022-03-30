@@ -101,7 +101,7 @@ class SphereTests
         result = sphere.findIntersections(new Ray(new Point(3, 0, 0),
                         new Vector(-1, 0, 0)));
         assertEquals(2, result.size(), "Wrong number of points");        
-        if (result.get(0).getX() > result.get(1).getX())
+        if (result.get(0).getXyz().getX() > result.get(1).getXyz().getX())
         {
             result = List.of(result.get(1), result.get(0));
         }
