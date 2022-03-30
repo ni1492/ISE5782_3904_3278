@@ -28,5 +28,10 @@ class TubeTests {
 		assertEquals(tube.getNormal(new Point(5,0,0)),new Vector(1,0,0),"ERROR: Tube.getNormal() does not work correctly");
 
 	}
+	@Test
+	void testFindIntersections()
+	{
+		
+	}
 
 }

@@ -7,7 +7,7 @@ import primitives.*;
  * implemented by - polygon, plane, sphere, triangle, tube, cylinder
  *
  */
-public interface Geometry 
+public interface Geometry extends Intersectable
 {
 	/**
 	 * get normal for geometric shapes
