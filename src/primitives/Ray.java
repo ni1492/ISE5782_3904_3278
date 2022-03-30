@@ -1,6 +1,8 @@
 package primitives;
 
 import java.util.Objects;
+import static primitives.Util.isZero;
+
 
 /**
  * ray class - primitive
@@ -45,4 +47,12 @@ public class Ray
 		this.p0 = p0;
 		this.dir = dir.normalize();
 	}
+	
+	public Point getPlusT(double delta ){
+        if (isZero(delta)){
+            return  p0;
+        }
+        return p0.add(dir.scale(delta));
+    }
+
 }

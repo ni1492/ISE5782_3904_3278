@@ -56,6 +56,16 @@ public class Triangle extends Polygon
 	}
 	@Override
 	public List<Point> findIntersections(Ray ray) {
-		return null;
+		if(super.plane.findIntersections(ray)!=null)
+		{
+			//TODO: if the point is on the plane then we have to check if it is on the triangle
+			//two ways to calculate if the point is on the triangle :
+			//1) do the bonus and do find intersections for polygon and then just call the super function 
+			//2) if areaABC== areaPAB+areaPBC+areaPAC then the point P is on the triangle
+			
+			return null;
+		}
+		else
+			return null;
 	}
 }
