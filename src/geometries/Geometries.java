@@ -7,28 +7,64 @@ import primitives.*;
 
 public class Geometries implements Intersectable
 {
-    private List<Intersectable> intersectables;
-
-	public Geometries() 
-	{
-		this.intersectables = new ArrayList();
-	}
-    
-	public Geometries(Intersectable... intersectables) 
-	{
-        this();
-        add(intersectables);
-    }
+private ArrayList<Intersectable> list;
 	
-	 public void add(Intersectable... intersectables) 
-	 {
-		 Collections.addAll(this.intersectables, intersectables);
-	 }
-    
-	 @Override
-	 public List<Point> findIntersections(Ray ray) 
-	 {
-		 return null;
-	 }
+	/**
+	 * default constructor
+	 */
+	public Geometries() {
+		list = new ArrayList<Intersectable>();
+	}
+	/**
+	 * Constructor- initializes the list of Intersectable with the geometries given 
+	 * @param collection of geometries which have the findIntersection func.
+	 */
+	public Geometries(Intersectable... geometries)
+	{
+		list = new ArrayList<Intersectable>();
+
+		for(Intersectable inter: geometries)
+		{
+			list.add(inter);
+		}
+	}
+	/**
+	 * adds all the geometries receives to the list of Intersectable.
+	 * @param collection of geometries which have the findIntersection func.
+	 */
+	public void add(Intersectable... geometries)
+	{
+		for(Intersectable inter: geometries)
+		{
+			list.add(inter);
+		}
+	}
+	/**
+	 * returns all the intersections points between the ray and the geometries objects.
+	 */
+	@Override 
+	public List<Point> findIntersections(Ray ray)
+	{ 
+		List<Point> result= new ArrayList<Point>();
+		List<Point> p;
+		for (Intersectable i: list) {
+			p = i.findIntersections(ray);
+			if (p!=null)//if there were intersections 
+			{
+				for(Point point: p) {
+					if(point!=null) 
+					{
+					result.add(point);
+					}
+				}
+			}
+		}
+		if (result.size()==0)//if there were no intersections
+		{
+			return null;
+		}
+		return result;
+	}
+
 
 }

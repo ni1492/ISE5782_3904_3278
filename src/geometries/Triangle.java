@@ -2,6 +2,8 @@ package geometries;
 import java.util.List;
 
 import primitives.*;
+import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 /**
  * 
  * triangle class - inherits from polygon class
@@ -55,17 +57,27 @@ public class Triangle extends Polygon
 		return v1.crossProduct(v2);
 	}
 	@Override
-	public List<Point> findIntersections(Ray ray) {
+	public List<Point> findIntersections(Ray ray) 
+	{
+		
+		//check if the ray intersects with the plane the triangle is on
 		if(super.plane.findIntersections(ray)!=null)
 		{
-			//TODO: if the point is on the plane then we have to check if it is on the triangle
-			//two ways to calculate if the point is on the triangle :
-			//1) do the bonus and do find intersections for polygon and then just call the super function 
-			//2) if areaABC== areaPAB+areaPBC+areaPAC then the point P is on the triangle
+			Point p0=ray.getP0();
+			Point p1=this.vertices.get(0);
+			Point p2=this.vertices.get(1);
+			Point p3=this.vertices.get(2);
+			Vector v1=p1.subtract(p0);
+			Vector v2=p2.subtract(p0);
+			Vector v3=p3.subtract(p0);
+			Vector n1=v1.crossProduct(v2).normalize();
+			Vector n2=v2.crossProduct(v3).normalize();
+			Vector n3=v3.crossProduct(v1).normalize();
 			
-			return null;
+			//check if the ray intersects at a point within the triangle
+			if((alignZero(ray.getDir().dotProduct(n1))>0)&&(alignZero(ray.getDir().dotProduct(n2))>0)&&(alignZero(ray.getDir().dotProduct(n3))>0)||((alignZero(ray.getDir().dotProduct(n1))<0)&&(alignZero(ray.getDir().dotProduct(n2))<0)&&(alignZero(ray.getDir().dotProduct(n3))<0)))
+				return this.plane.findIntersections(ray);
 		}
-		else
-			return null;
+		return null;
 	}
 }

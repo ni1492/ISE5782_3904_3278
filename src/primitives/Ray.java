@@ -3,16 +3,14 @@ package primitives;
 import java.util.Objects;
 import static primitives.Util.isZero;
 
-
 /**
  * ray class - primitive
  *
  */
-public class Ray 
-{
+public class Ray {
 	final Point p0;
 	final Vector dir;
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -27,32 +25,33 @@ public class Ray
 
 	@Override
 	public String toString() {
-		return  p0.toString() + dir.toString();
+		return p0.toString() + dir.toString();
 	}
-	public Vector getDir()
-	{
+
+	public Vector getDir() {
 		return dir;
 	}
-	public Point getPoint()
-	{
+
+	public Point getP0() {
 		return p0;
 	}
+
 	/**
 	 * ray class constructor
-	 * @param p0 receives a point
+	 * 
+	 * @param p0  receives a point
 	 * @param dir receives a vector
 	 */
-	public Ray(Point p0, Vector dir) 
-	{
+	public Ray(Point p0, Vector dir) {
 		this.p0 = p0;
 		this.dir = dir.normalize();
 	}
-	
-	public Point getPlusT(double delta ){
-        if (isZero(delta)){
-            return  p0;
-        }
-        return p0.add(dir.scale(delta));
-    }
+
+	public Point getPoint(double delta) {
+		if (isZero(delta)) {
+			return p0;
+		}
+		return p0.add(dir.scale(delta));
+	}
 
 }

@@ -10,7 +10,8 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import geometries.*;
 import primitives.*;
-
+import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 /**
  * @author nogae
@@ -42,10 +43,10 @@ class TriangleTests {
 		// ============ Equivalence Partitions Tests ==============
 		
 		// TC01: Ray intersects with a point within the triangle(1 point) 
-		Point p=new Point(0.02,0,0.26);
-		List<Point> result = triangle.findIntersections(new Ray(new Point(-2, -4, 0),
-                new Vector(2.02,4,0.26)));
-		assertEquals(1, result.size(), "Wrong number of points");        
+		Point p=new Point(-0.4,0,0);
+ 		List<Point> result = triangle.findIntersections(new Ray(new Point(4, 0, 0),
+                new Vector(-1,0,0)));
+		assertEquals(1, result.size(), "Wrong number of points");
 		assertEquals(result,List.of(p),"Ray crosses triangle");
 		
 		// TC02: Ray intersects with a point outside the triangle, on the same plane(0 points)
