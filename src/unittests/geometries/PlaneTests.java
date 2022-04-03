@@ -59,9 +59,9 @@ class PlaneTests {
         // ============ Equivalence Partitions Tests ==============
 
         // TC01: Ray intersects the plane
-        List<Point> result = plane.findIntersections(new Ray(new Point(1,0,0), new Vector(1,-2,-2)));
+        List<Point> result = plane.findIntersections(new Ray(new Point(1,0,0), new Vector(1,-2,0)));
         List<Point> check = new ArrayList<Point>();
-        check.add(new Point(2,-2,2));
+        check.add(new Point(2,-2,0));
         assertEquals(check, result, "Ray crosses plane, and the function didn't find the croos point");
 
         // TC02: Ray does not intersect the plane

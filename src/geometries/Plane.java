@@ -1,4 +1,5 @@
 package geometries;
+import java.util.ArrayList;
 import java.util.List;
 
 import primitives.*;
@@ -79,42 +80,47 @@ public class Plane implements Geometry
 	@Override
 	public List<Point> findIntersections(Ray ray) 
 	{
+		
 		//preparing the correct vectors and point for later calculations:
-		 Point P0 = ray.getPoint();
+		 Point P0 = ray.getP0();
 	     Vector v = ray.getDir();
 	     Vector n = normal;
-	     Vector q0minusP0 = q0.subtract(P0);
-	     double nv = alignZero(n.dotProduct(v));
-	     double nQ0minusP0  = alignZero(n.dotProduct(q0minusP0));
-	     double  t = alignZero(nQ0minusP0  / nv);
-
-	     //if the ray starts from the plane - return null (0 points)
-	     if(q0.equals(P0))
-	     {
-	         return  null;
-	     }
-
-	     // if the ray is lying in the plane - return null (infinite points)
+	     double nv = n.dotProduct(v);
+	     
+ 		
+ 		// if the ray is lying in the plane - return null (infinite points)
 	     if(isZero(nv))
 	     {
 	         return null;
 	     }
-
-	      
-	     // if the ray is parallel to the plane - return null (0 points)
-	     if (isZero(nQ0minusP0 ))
+	     
+	     //if the ray starts from the plane - return null (0 points)
+	     if(q0.equals(P0))
 	     {
-	         return null;
+	    	 return List.of(q0);
 	     }
-
-
+	     
+	     Vector q0minusP0 = q0.subtract(P0);
+	     double nQ0minusP0  = n.dotProduct(q0minusP0);
+	     
+	     // if the ray is parallel to the plane - return null (0 points)
+	     if (nQ0minusP0==0)
+	     {
+	    	 return List.of(ray.getP0());
+	     }
+	     
+	     double  t = nQ0minusP0/nv;
+	     
 	     if (t <0) //no intersection - return null (0 points)
 	     {
 	         return  null;
 	     }
+	    
 	     	
 	     //return the point of intersection (1 point)
-	     Point point = ray.getPlusT(t);
+	     Point point = ray.getPoint(t);
 	     return List.of(point);
+	    
 	    }
+
 }

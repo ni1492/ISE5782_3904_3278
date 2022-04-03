@@ -9,14 +9,14 @@ public class Tube implements Geometry
 	public Vector getNormal(Point point)
 	{
 		
-		Vector v=point.subtract(this.axisRay.getPoint());
+		Vector v=point.subtract(this.axisRay.getP0());
 		
 		if(v.dotProduct(this.axisRay.getDir())==0)
 		{
 			return v.normalize();
 		}
 		double t=this.axisRay.getDir().dotProduct(v);
-		Point o=this.axisRay.getPoint().add(this.axisRay.getDir().scale(t));
+		Point o=this.axisRay.getP0().add(this.axisRay.getDir().scale(t));
 		Vector normal=(point.subtract(o)).normalize();
 		return normal;
 	}
