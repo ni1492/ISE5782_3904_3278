@@ -3,6 +3,8 @@ package renderer;
 import primitives.*;
 import static primitives.Util.isZero;
 
+import java.util.MissingResourceException;
+
 public class Camera {
 	private Point location;
 	private Vector vRight;
@@ -11,7 +13,8 @@ public class Camera {
 	private double height;
 	private double width;
 	private double distance;
-
+	private ImageWriter writer;
+	private RayTracerBasic rayTracer;
 	/**
 	 * constructor (calculate the vector vRight
 	 * @param location: starting point of the camera
@@ -68,7 +71,7 @@ public class Camera {
 
         // pixel center
         double Xj = (j - ((nX - 1) / 2d)) * Rx;
-        double Yi = -(i - ((nY - 1) / 2d)) * Ry;
+        double Yi = (i - ((nY - 1) / 2d)) * Ry;
 
         // the point represent the pixel
         Point Pij = Pc;
@@ -80,5 +83,70 @@ public class Camera {
         // direction of the ray - from the location of the camera towards the pixel point
         // the ray constructed by the camera
         return new Ray(location, Pij.subtract(location));
+	}
+	
+	/**
+	 * setting the writer image to create an image
+	 * @param writer ImageWriter: the writer which create the picture
+	 * @return the camera with the new details
+	 */
+	public Camera setWriter(ImageWriter writer) {
+		this.writer=writer;
+		return this;
+	}
+	/**
+	 * setting the ray tracer for the camera
+	 * @param ray RayTracerBase: the ray to trace the objects???????????
+	 * @return the camera with the new details
+	 */
+	public Camera setRayTracerBasic(RayTracerBasic ray) {
+		this.rayTracer=ray;
+		return this;
+	}
+
+	/**
+	 * check if all he fields are set
+	 */
+	public void renderImage() {
+		if(location==null || vRight==null || vUp==null || vTo==null || writer==null || rayTracer==null
+				|| Double.isNaN(height)||Double.isNaN(width)||Double.isNaN(distance))
+			throw new MissingResourceException("not all the fields are set", null, null);
+		Color color;
+		for( int i=0; i<writer.getNx();i++)
+		{
+			for(int j=0;j<writer.getNy();j++)
+			{
+			color=rayTracer.traceRay(this.constructRay(writer.getNx(),writer.getNy(),i,j));
+			writer.writePixel(j, i, color);
+			}
+		}
+	}
+	/**
+	 * create a grid for the image
+	 * @param interval int: the height and the width of every square in the grid
+	 * @param color Color: the color of the grid
+	 */
+	public void printGrid(int interval, Color color) {
+		if(writer==null)
+			throw new MissingResourceException("the writer isn't set yet",null,null);
+		for( int i=0; i<writer.getNx();i++)
+		{
+			for(int j=0;j<writer.getNy();j++)
+			{
+				if(i%interval==0||j%interval==0)
+				{
+					writer.writePixel(i, j, color);
+				}
+			}
+		}
+	}
+	/**
+	 * create an image
+	 */
+	public void writeToImage()
+	{
+		if(writer==null)
+			throw new MissingResourceException("the writer isn't set yet",null,null);
+		writer.writeToImage();
 	}
 }
