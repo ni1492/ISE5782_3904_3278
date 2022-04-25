@@ -68,6 +68,7 @@ public class Ray {
 	}
 	
 	/**
+	 * Deprecated function! no longer in use.
 	 * gets a list of points and return the closest point to the starting point
 	 * @param points list of points
 	 * @return the closest point
