@@ -51,7 +51,7 @@ public class Ray {
 	 * @param dir receives a vector
 	 */
 	public Ray(Point p0, Vector dir) {
-		this.p0 = p0;
+		this.p0 = new Point(p0.xyz.d1,p0.xyz.d2,p0.xyz.d3);
 		this.dir = dir.normalize();
 	}
 

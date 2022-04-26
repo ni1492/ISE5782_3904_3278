@@ -132,6 +132,8 @@ public class Vector extends Point
 	 */
 	public Vector normalize()
 	{
-		return new Vector(this.xyz.reduce(this.length()));
+		double scale=1/this.length();
+		return this.scale(scale);
+		//return new Vector(this.xyz.reduce(this.length())); 
 	}
 }
