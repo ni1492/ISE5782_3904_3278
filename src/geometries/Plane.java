@@ -8,7 +8,7 @@ import static primitives.Util.isZero;
 /**
  * class plane - geometric shape, implements geometry interface.
  */
-public class Plane implements Geometry 
+public class Plane extends Geometry 
 {
 	final Point q0;
 	final Vector normal;
@@ -33,7 +33,7 @@ public class Plane implements Geometry
 		this.q0 = q0;
 		Vector a=q1.subtract(q0);
 		Vector b=q2.subtract(q0);
-		if(q0==q1 ||q0==q2 ||q1==q2)
+		if(q0==q1 ||q0==q2 ||q1==q2) //checks that no 2 points are the same
 			throw new IllegalArgumentException("A plane can't be created because there are only two different points");
 
 		try
@@ -45,21 +45,9 @@ public class Plane implements Geometry
 			throw new IllegalArgumentException("A plane can't be created because all the points are on the same ray");
 		}
 		this.normal =(a.crossProduct(b)).normalize();
-		//this.normal=null;
 	}
-	/**
-	 * get normal function -implements geometry getNormal function
-	 * @return returns the normal of the plane
-	 */
-	public Vector getNormal(Point point)
-	{
-		return this.getNormal();
-	}
-
-	@Override
-	public String toString() {
-		return  q0.toString() + normal.toString();
-	}
+	
+	//getters:
 	
 	/**
 	 * get point q0 function 
@@ -76,6 +64,21 @@ public class Plane implements Geometry
 	public Vector getNormal() {
 		return normal;
 	}
+		
+	/**
+	 * get normal function -implements geometry getNormal function
+	 * @return returns the normal of the plane
+	 */
+	public Vector getNormal(Point point)
+	{
+		return this.getNormal();
+	}
+
+	@Override
+	public String toString() {
+		return  q0.toString() + normal.toString();
+	}
+	
 	
 	@Override
 	public List<Point> findIntersections(Ray ray) 
@@ -88,13 +91,13 @@ public class Plane implements Geometry
 	     double nv = n.dotProduct(v);
 	     
  		
- 		// if the ray is lying in the plane - return null (infinite points)
+ 		// if the ray is lying in the plane or orthogonal - return null (infinite points)
 	     if(isZero(nv))
 	     {
 	         return null;
 	     }
 	     
-	     //if the ray starts from the plane - return null (0 points)
+	     //if the ray starts from the plane - return the point (1 points)
 	     if(q0.equals(P0))
 	     {
 	    	 return List.of(q0);
@@ -122,5 +125,47 @@ public class Plane implements Geometry
 	     return List.of(point);
 	    
 	    }
+	@Override
+	protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+		//preparing the correct vectors and point for later calculations:
+		 Point P0 = ray.getP0();
+	     Vector v = ray.getDir();
+	     Vector n = normal;
+	     double nv = n.dotProduct(v);
+	     
+		
+		// if the ray is lying in the plane or orthogonal - return null (infinite points)
+	     if(isZero(nv))
+	     {
+	         return null;
+	     }
+	     
+	     //if the ray starts from the plane - return the point (1 points)
+	     if(q0.equals(P0))
+	     {
+	    	 return List.of(new GeoPoint(this,q0));
+	     }
+	     
+	     Vector q0minusP0 = q0.subtract(P0);
+	     double nQ0minusP0  = n.dotProduct(q0minusP0);
+	     
+	     // if the ray is parallel to the plane - return null (0 points)
+	     if (nQ0minusP0==0)
+	     {
+	    	 return List.of(new GeoPoint(this,ray.getP0()));
+	     }
+	     
+	     double  t = nQ0minusP0/nv;
+	     
+	     if (t <0) //no intersection - return null (0 points)
+	     {
+	         return  null;
+	     }
+	    
+	     	
+	     //return the point of intersection (1 point)
+	     Point point = ray.getPoint(t);
+	     return List.of(new GeoPoint(this,point));
+	    	}
 
 }

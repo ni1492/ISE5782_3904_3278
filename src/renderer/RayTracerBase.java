@@ -3,7 +3,7 @@ package renderer;
 import primitives.*;
 import scene.*;
 /**
- * 
+ * finding the color of the pixels
  * @author nogae
  *
  */

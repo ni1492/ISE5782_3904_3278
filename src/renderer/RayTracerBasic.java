@@ -1,12 +1,12 @@
 package renderer;
 
 import java.util.List;
-
+import geometries.Intersectable.GeoPoint;
 import primitives.*;
 import scene.*;
 
 /**
- * 
+ * finding the color of the pixels
  * @author nogae
  *
  */
@@ -27,18 +27,18 @@ public class RayTracerBasic extends RayTracerBase {
 	 */
 	public Color traceRay(Ray r)
 	{
-		List<Point> points=scene.geometries.findIntersections(r);
+		List<GeoPoint> points=scene.geometries.findGeoIntersections(r);
 		if(points==null)
 			return scene.background;
-		return calcColor(r.findClosestPoint(points));
+		return calcColor(r.findClosestGeoPoint(points));
 		}
 	/**
 	 * return the color of the point depends on the lightning around
 	 * @param point Point: the point to check the color
 	 * @return return the color of the point
 	 */
-	public Color calcColor(Point point)
+	public Color calcColor(GeoPoint point)
 	{
-		return this.scene.ambientLight.getIntensity();
+		return point.geometry.getEmission().add(this.scene.ambientLight.getIntensity());
 	}
 }

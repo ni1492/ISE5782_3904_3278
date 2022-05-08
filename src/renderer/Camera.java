@@ -75,7 +75,7 @@ public class Camera {
 		double Rx = width / nX;
 		double Ry = height / nY;
 
-		// pixel center
+		// calculate how much to move from center
 		double Xj = (j - ((nX - 1) / 2d)) * Rx;
 		double Yi = -(i - ((nY - 1) / 2d)) * Ry;
 
@@ -116,6 +116,7 @@ public class Camera {
 
 	/**
 	 * check if all he fields are set
+	 * creating the image in the writer
 	 */
 	public void renderImage() {
 		if (location == null || vRight == null || vUp == null || vTo == null || writer == null || rayTracer == null
