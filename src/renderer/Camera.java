@@ -117,7 +117,7 @@ public class Camera {
 	/**
 	 * check if all he fields are set
 	 * creating the image in the writer
-	 */
+	 */ 
 	public void renderImage() {
 		if (location == null || vRight == null || vUp == null || vTo == null || writer == null || rayTracer == null
 				|| Double.isNaN(height) || Double.isNaN(width) || Double.isNaN(distance))
