@@ -29,6 +29,7 @@ public SpotLight(Color intensity, Point position, double kC, double kQ, double k
 public SpotLight(Color intensity, Point position, Vector direction) {
 	super(intensity, position);
 	this.direction = direction;
+	
 }
 	@Override
 	public Color getIntensity(Point p) {

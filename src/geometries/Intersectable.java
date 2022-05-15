@@ -84,7 +84,7 @@ public abstract class Intersectable
 	public  List<GeoPoint> findGeoIntersections(Ray ray){
 		return findGeoIntersectionsHelper(ray);
 	}
-	/**???????????????????????????????????
+	/**
 	 * helper function for findGeoIntersections
 	 * @param ray type- the ray that intersects with the shape
 	 * @return List of intersections GeoPoints with the shape
