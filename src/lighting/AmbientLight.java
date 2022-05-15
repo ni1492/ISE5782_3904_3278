@@ -3,6 +3,10 @@ package lighting;
 import renderer.*;
 import primitives.*;
 
+/**
+ * ambient light class
+ * extends light
+ */
 public class AmbientLight extends Light {
 
 	/**

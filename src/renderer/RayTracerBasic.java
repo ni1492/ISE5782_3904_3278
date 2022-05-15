@@ -10,7 +10,6 @@ import static primitives.Util.alignZero;
 /**
  * finding the color of the pixels
  * 
- * @author nogae
  *
  */
 public class RayTracerBasic extends RayTracerBase {
@@ -56,7 +55,7 @@ public class RayTracerBasic extends RayTracerBase {
 	private Color calcLocalEffects(GeoPoint point,Ray ray) {
 		Color color=point.geometry.getEmission();
 		Vector v=ray.getDir();
-		Vector n=point.geometry.getNormal(point.point);
+		Vector n=point.geometry.getNormal(point.point).normalize();
 		double nv=alignZero(n.dotProduct(v));
 		if(nv==0)
 			return color;
@@ -76,29 +75,29 @@ public class RayTracerBasic extends RayTracerBase {
 	}
 
 	/**
-	 * 
-	 * @param material
-	 * @param n
-	 * @param l
-	 * @param nl
-	 * @param v
-	 * @return
+	 * returns the specular calculation of the material
+	 * @param material - material
+	 * @param n - vector normal
+	 * @param l - vector from the light source to the point
+	 * @param nl - double - dot product of l and n
+	 * @param v - vector direction of the ray
+	 * @return the specular calculation of the material - double3
 	 */
 	private Double3 calcSpecular(Material material, Vector n, Vector l, double nl, Vector v) {
 		Vector r=l.add(n.scale(nl).scale(-2));
 		double vr=alignZero(r.dotProduct(v.scale(-1)));
-		if(vr<=0)
+		if(vr<0)
 		{
-			return Double3.ZERO;
+			vr=0;
 		}
 		return material.kS.scale(Math.pow(vr, material.nShininess));
 	}
 
 	/**
-	 * 
-	 * @param material
-	 * @param nl
-	 * @return
+	 * returns the diffusive calculation of the material
+	 * @param material - material
+	 * @param nl - double - dot product of vector between the lightsource and point and vector normal of the point
+	 * @return the diffusive calculation of the material - double3
 	 */
 	private Double3 calcDiffusive(Material material, double nl) {
 		return material.kD.scale(Math.abs(nl));

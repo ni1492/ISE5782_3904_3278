@@ -4,7 +4,6 @@ import primitives.*;
 import scene.*;
 /**
  * finding the color of the pixels
- * @author nogae
  *
  */
 public abstract class RayTracerBase {
