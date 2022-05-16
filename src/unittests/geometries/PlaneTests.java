@@ -11,10 +11,10 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import geometries.*;
+import geometries.Intersectable.GeoPoint;
 import primitives.*;
 
 /**
- * @author nogae
  *
  */
 class PlaneTests {
@@ -63,7 +63,7 @@ class PlaneTests {
         List<Point> check = new ArrayList<Point>();
         check.add(new Point(2,-2,0));
         assertEquals(check, result, "Ray crosses plane, and the function didn't find the croos point");
-
+             
         // TC02: Ray does not intersect the plane
         result = plane.findIntersections(new Ray(new Point(1,0,0), new Vector(-1,0,1)));
         assertEquals(null, result, "Ray does not crosses plane, and the function think it does, and i don't know why, my partner did this part :)");
@@ -109,5 +109,52 @@ class PlaneTests {
                 "the same point which appears as reference point in the plane");
 
     }
+/*
+	void testFindGeoIntersections() {
+        Plane plane = new Plane(new Point(2, 0, 0), new Vector(1, 0, 0));
 
+        // ============ Equivalence Partitions Tests ==============
+
+        // TC01: Ray intersects the plane
+        List<GeoPoint> result = plane.findGeoIntersections(new Ray(new Point(1,0,0), new Vector(1,-2,0)),3);
+        List<GeoPoint> check = new ArrayList<GeoPoint>();
+        check.add(new GeoPoint(plane,new Point(2,-2,0)));
+        assertEquals(check, result, "Ray crosses plane, and the function didn't find the croos point");
+             
+        result = plane.findGeoIntersections(new Ray(new Point(1,0,0), new Vector(1,-2,0)),1);
+        assertEquals(null, result, "Ray crosses plane, but the distance is too far");
+
+        // =============== Boundary Values Tests ==================
+
+        // TC5: Ray is orthogonal to the plane and P0 is before the plane
+        result = plane.findGeoIntersections(new Ray(new Point(1,0,0), new Vector(1,0,0)),3);
+        check = new ArrayList<GeoPoint>();
+        check.add(new GeoPoint(plane,new Point(2,0,0)));
+        assertEquals(check, result, "Ray is orthogonal to the plane and P0 is before the plane - one intsersection point");
+       
+        result = plane.findGeoIntersections(new Ray(new Point(1,0,0), new Vector(1,0,0)),1);
+        assertEquals(null, result, "Ray is orthogonal to the plane and P0 is before the plane - but the distance is too far");
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // TC6: Ray is orthogonal to the plane and P0 is in the plane
+        result = plane.findGeoIntersections(new Ray(new Point(2,0,1), new Vector(1,0,0)));
+        check = new ArrayList<GeoPoint>();
+        check.add(new GeoPoint(plane,new Point(2,0,1)));
+        assertEquals(check, result, "Ray is orthogonal to the plane and P0 is in the plane - p0 is intsersection point");
+
+        // TC8: Ray is neither orthogonal nor parallel to the plane and begins at the plane
+        List<Point> result1 = plane.findIntersections(new Ray(new Point(2,1,1), new Vector(1,-2,-2)));
+        List<Point> check1 = new ArrayList<Point>();
+        check1.add(new Point(2,1,1));
+        assertEquals(check1, result1, "Ray is neither orthogonal nor parallel to the plane and begins at the plane");
+
+        // TC9: Ray is neither orthogonal nor parallel to the plane and begins in
+        //the same point which appears as reference point in the plane
+        List<Point> result2 = plane.findIntersections(new Ray(new Point(2,0,0), new Vector(1,-2,-2)));
+        List<Point> check2 = new ArrayList<Point>();
+        check2.add(new Point(2,0,0));
+        assertEquals(check2, result2, "Ray is neither orthogonal nor parallel to the plane and begins in " +
+                "the same point which appears as reference point in the plane");
+
+    }
+*/
 }

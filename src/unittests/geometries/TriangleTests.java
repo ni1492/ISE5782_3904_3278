@@ -14,7 +14,6 @@ import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 /**
- * @author nogae
  *
  */
 class TriangleTests {

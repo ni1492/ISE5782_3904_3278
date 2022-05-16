@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import geometries.*;
 import primitives.*;
 /**
- * @author nogae
  *
  */
 class SphereTests 

@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import primitives.*;
 import geometries.*;
 /**
- * @author nogae
  *
  */
 class TubeTests {

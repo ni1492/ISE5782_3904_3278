@@ -21,7 +21,6 @@ public abstract class Intersectable
 	
 	/**
 	 * new representation for a Point thats on a geometry object.
-	 * @author nogae
 	 *
 	 */
 	public class GeoPoint{

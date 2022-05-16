@@ -11,7 +11,6 @@ import primitives.*;
 import geometries.*;
 
 /**
- * @author nogae
  *
  */
 class CylinderTests {
