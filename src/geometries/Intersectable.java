@@ -81,15 +81,27 @@ public abstract class Intersectable
 	 * @param ray type- the ray that intersects with the shape
 	 * @return List of intersections GeoPoints with the shape
 	 */
-	public  List<GeoPoint> findGeoIntersections(Ray ray){
-		return findGeoIntersectionsHelper(ray);
+	public final  List<GeoPoint> findGeoIntersections(Ray ray){
+		return findGeoIntersectionsHelper(ray, Double.POSITIVE_INFINITY);
 	}
+	/**
+	 * 
+	 * the func gets ray and returns list of intersections with the geometry NVI pattern
+	 * @param ray type- the ray that intersects with the shape
+	 * @param maxDistance - double distance
+	 * @return List of intersections GeoPoints with the shape in the given distance
+	 * 	 */
+	public final  List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance){
+		return findGeoIntersectionsHelper(ray, maxDistance);
+	}
+
 	/**
 	 * helper function for findGeoIntersections
 	 * @param ray type- the ray that intersects with the shape
-	 * @return List of intersections GeoPoints with the shape
+	 * @param maxDistance - double distance
+	 * @return List of intersections GeoPoints with the shape in the given distance
 	 */
-	protected abstract List<GeoPoint> findGeoIntersectionsHelper(Ray ray);
+	protected abstract List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance);
 
 
 }

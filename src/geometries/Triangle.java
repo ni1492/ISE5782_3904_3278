@@ -83,7 +83,7 @@ public class Triangle extends Polygon
 		return null;
 	}
 	@Override
-	protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+	protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
 		List<GeoPoint> list=null;
 		List<GeoPoint> result = new ArrayList<GeoPoint>();
 		//check if the ray intersects with the plane the triangle is on
@@ -108,7 +108,9 @@ public class Triangle extends Polygon
 						else {
 							for(GeoPoint point: list)
 							{
-								result.add(new GeoPoint(this,point.point));
+								if(point.point.distance(ray.getP0())<=maxDistance ) {
+									result.add(new GeoPoint(this,point.point));
+								}
 							}
 						}
 						return result;

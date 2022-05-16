@@ -37,5 +37,10 @@ public Color getIntensity(Point p) {
 public Vector getL(Point p) {
 	return this.direction.normalize();
 }
-	
+/**
+ * no position- the distance is infinity	
+ */
+public double getDistance(Point p) {
+	return Double.POSITIVE_INFINITY;
+}
 }

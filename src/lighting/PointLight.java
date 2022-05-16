@@ -92,5 +92,8 @@ public Vector getL(Point p) {
 	
 }
 
+public double getDistance(Point p) {
+	return this.position.distance(p);
+}
 	
 }

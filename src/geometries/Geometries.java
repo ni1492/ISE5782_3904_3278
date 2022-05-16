@@ -65,12 +65,12 @@ private ArrayList<Intersectable> list;
 		}
 		return result;
 	}
-	@Override
-	protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+	
+	protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
 		List<GeoPoint> result= new ArrayList<GeoPoint>();
 		List<GeoPoint> p;
 		for (Intersectable i: list) {
-			p = i.findGeoIntersections(ray);
+			p = i.findGeoIntersections(ray, maxDistance);
 			if (p!=null)//if there were intersections 
 			{
 				for(GeoPoint point: p) {

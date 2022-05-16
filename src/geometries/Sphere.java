@@ -80,9 +80,15 @@ public class Sphere extends Geometry
 	}
 
 	@Override
-	protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+	protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
 		if(this.center.equals(ray.getP0()))
-			return List.of(new GeoPoint(this,ray.getP0().add(ray.getDir().scale(this.radius))));
+		{
+			GeoPoint p=new GeoPoint(this,ray.getP0().add(ray.getDir().scale(this.radius)));
+			if(p.point.distance(ray.getP0())<=maxDistance) {
+				return List.of(p);
+			}
+			return null;
+		}
 		Vector u=this.center.subtract(ray.getP0());
 		double tm=ray.getDir().dotProduct(u);
 		double d=Math.sqrt(u.lengthSquared()-(tm*tm));
@@ -93,13 +99,28 @@ public class Sphere extends Geometry
 			return null;
 		Point p1=ray.getPoint(tm+th);
 		if(ray.getP0().distance(center)<=radius)
-			return List.of(new GeoPoint(this,p1));
+		{
+			GeoPoint p=new GeoPoint(this,p1);
+			if(p.point.distance(ray.getP0())<=maxDistance) {
+				return List.of(p);
+			}
+			return null;
+		}
 		if(tm+th<0 &&th-th<0 ||tm<0)
 			return null;
 		Point p2=ray.getPoint(tm-th);
 		
-		
-		return List.of(new GeoPoint(this,p2),new GeoPoint(this,p1));
+		if(p1.distance(ray.getP0())<=maxDistance && p2.distance(ray.getP0())<=maxDistance ) {
+			return List.of(new GeoPoint(this,p2),new GeoPoint(this,p1));
+		}
+		if(p2.distance(ray.getP0())<=maxDistance ) {
+			return List.of(new GeoPoint(this,p2));
+		}
+		if(p1.distance(ray.getP0())<=maxDistance ) {
+			return List.of(new GeoPoint(this,p1));
+		}
+		return null;
+
 	}
 	
 	

@@ -125,8 +125,7 @@ public class Plane extends Geometry
 	     return List.of(point);
 	    
 	    }
-	@Override
-	protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+	protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
 		//preparing the correct vectors and point for later calculations:
 		 Point P0 = ray.getP0();
 	     Vector v = ray.getDir();
@@ -165,7 +164,10 @@ public class Plane extends Geometry
 	     	
 	     //return the point of intersection (1 point)
 	     Point point = ray.getPoint(t);
-	     return List.of(new GeoPoint(this,point));
+	     if(point.distance(ray.getP0())<=maxDistance) {
+	    	 return List.of(new GeoPoint(this,point));
+	     }
+	     return null;
 	    	}
 
 }

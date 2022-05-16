@@ -13,7 +13,7 @@ import static primitives.Util.alignZero;
  *
  */
 public class RayTracerBasic extends RayTracerBase {
-
+	private static final double DELTA = 0.1;// how much to move from he object so the object wont make shadow on the point that's on it
 	/**
 	 * constructor that receives a scene and construct the scene
 	 * 
@@ -67,9 +67,11 @@ public class RayTracerBasic extends RayTracerBase {
 			double nl=alignZero(n.dotProduct(l));
 			if(nl*nv>0)//sign(nl)==sign(nv)
 			{
-				Color iL=light.getIntensity(point.point);
-				color=color.add(iL.scale(calcDiffusive(material,nl)),iL.scale(calcSpecular(material,n,l,nl,v)));
-			}
+				if(unshaded(point, l, n, light, nv)) {
+					Color iL=light.getIntensity(point.point);
+					color=color.add(iL.scale(calcDiffusive(material,nl)),iL.scale(calcSpecular(material,n,l,nl,v)));
+				}
+				}
 		}
 		return color;
 	}
@@ -101,5 +103,33 @@ public class RayTracerBasic extends RayTracerBase {
 	 */
 	private Double3 calcDiffusive(Material material, double nl) {
 		return material.kD.scale(Math.abs(nl));
+	}
+	
+	/**
+	 * checks if there is an object that make shadow on the point
+	 * @param gp - the point on the geometry: GeoPoint
+	 * @param l - the vector from the light to the point: Vector
+	 * @param n - the normal to the point: Vector 
+	 * @return if there is an object between the point to the source light
+	 */
+	private boolean unshaded(GeoPoint gp, Vector l, Vector n, LightSource light, double nv) {
+		Vector lightDir=l.scale(-1);//turn the vector- from the point to the light
+		Vector deltaVector=n.scale(nv<0 ? DELTA : -DELTA);//the vector from the original point towards the normal
+		//move it closer to the light source- short if 
+		Point point=gp.point.add(deltaVector);//raises the point from the object
+		Ray lightRay=new Ray(point,lightDir);//new ray from the new point to the light source
+		double length=light.getDistance(point);//helper function to find the distance from the light to the point 
+		List<GeoPoint> intersections=this.scene.geometries.findGeoIntersections(lightRay,length);
+		if(intersections==null)
+			return true;
+		
+		/* non bonus solution
+		 for(GeoPoint p: intersections) {
+			if(p.point.distance(point)<length)
+				return false;
+		}
+		*/
+		
+		return false;
 	}
 }
