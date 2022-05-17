@@ -21,7 +21,7 @@ public Double3 kT=Double3.ZERO;
 /**
  * field: reflectivity
  */
-public Double3 kR=Double3.ZERO;
+public Double3 kR= Double3.ZERO;
 /**
  * field: shininess
  */

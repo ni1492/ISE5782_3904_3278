@@ -50,8 +50,8 @@ public class RayTracerBasic extends RayTracerBase {
 	}
 	
 	/**
-	 * 
-	 * @param point
+	 * return the color of the point depends on the lightning around
+	 * @param point Point: the point to check the color
 	 * @param ray
 	 * @param level
 	 * @param k
@@ -64,16 +64,33 @@ public class RayTracerBasic extends RayTracerBase {
 	}
 	
 	/**
-	 * 
-	 * @param point
-	 * @param ray
+	 * helper function for calcColor- calculate the effects of the reflection and the refraction on the point
+	 * @param point Point: the point to check the color
+	 * @param ray Ray: the ray that intersects with the point
 	 * @param level
 	 * @param k
 	 * @return
 	 */
 	private Color calcGlobalEffects(GeoPoint point, Ray ray, int level, Double3 k) {
-		// TODO Auto-generated method stub
-		return null;
+		Color color=scene.background;
+		Double3 kr=point.geometry.getMaterial().kR;
+		Double3 kkr=k.product(kr);
+		if(!kkr.lowerThan(MIN_CALC_COLOR_K)) {
+			Ray reflectedRay=constructReflectionRay(point.point, ray.getDir(),point.geometry.getNormal(point.point));
+			GeoPoint p=findClosestIntersection(reflectedRay);
+			if(p!=null)
+				color=color.add(calcColor(p,reflectedRay,level-1,kkr).scale(kr));
+		}
+		Double3 kt=point.geometry.getMaterial().kT;
+		Double3 kkt=k.product(kt);
+		if(!kkt.lowerThan(MIN_CALC_COLOR_K)) {
+			Ray refractedRay=constructRefractionRay(point.point, ray.getDir(),point.geometry.getNormal(point.point));
+			GeoPoint p=findClosestIntersection(refractedRay);
+			if(p!=null)
+				color=color.add(calcColor(p,refractedRay,level-1,kkt).scale(kt));
+		}
+
+		return color;
 	}
 
 	/**
@@ -152,7 +169,12 @@ public class RayTracerBasic extends RayTracerBase {
 		List<GeoPoint> intersections=this.scene.geometries.findGeoIntersections(lightRay,length);
 		if(intersections==null)
 			return true;
-		
+		for(GeoPoint p: intersections)
+		{
+			if(p.geometry.getMaterial().kT.equals(Double3.ZERO))
+				return false;
+				
+		}
 		/* non bonus solution
 		 for(GeoPoint p: intersections) {
 			if(p.point.distance(point)<length)
@@ -160,7 +182,7 @@ public class RayTracerBasic extends RayTracerBase {
 		}
 		*/
 		
-		return false;
+		return true;
 	}
 	/**
 	 * find the closest intersection to the ray 
@@ -183,10 +205,8 @@ public class RayTracerBasic extends RayTracerBase {
 	 */
 	private Ray constructReflectionRay(Point point, Vector v, Vector n) {
 		double nv=alignZero(n.dotProduct(v));
-		Vector deltaVector=n.scale(nv<0 ? DELTA : -DELTA);//the vector from the original point towards the normal
+		Vector deltaVector=n.scale(nv>0 ? DELTA : -DELTA);//the vector from the original point towards the normal
 		Point p=point.add(deltaVector);//raises the point from the object
-		if(nv==0)
-			return new Ray(p,v);
 		Vector r=v.subtract(n.scale(2*nv));
 		return new Ray(p,r);
 
@@ -200,7 +220,7 @@ public class RayTracerBasic extends RayTracerBase {
 	 */
 	private Ray constructRefractionRay(Point point, Vector v, Vector n) {
 		double nv=alignZero(n.dotProduct(v));
-		Vector deltaVector=n.scale(nv<0 ? DELTA : -DELTA);//the vector from the original point towards the normal
+		Vector deltaVector=n.scale(nv>0 ? DELTA : -DELTA);//the vector from the original point towards the normal
 		Point p=point.add(deltaVector);//raises the point from the object
 		return new Ray(p,v);
 
