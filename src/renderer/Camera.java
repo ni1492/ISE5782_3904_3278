@@ -129,6 +129,8 @@ public class Camera {
 				writer.writePixel(j, i, color);
 			}
 		}
+//		color = rayTracer.traceRay(this.constructRay(writer.getNx(), writer.getNy(), (int)(writer.getNy()/1.5), writer.getNx()/5));
+//		writer.writePixel((int)(writer.getNy()/1.5), writer.getNx()/5, color);
 	}
 
 	/**

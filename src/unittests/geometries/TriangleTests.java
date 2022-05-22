@@ -78,5 +78,8 @@ class TriangleTests {
      	result = triangle.findIntersections(new Ray(new Point(-2, -4, 0),
      				        new Vector(4.43,2.52,1.95)));
         assertNull(result,"Ray's line out of triangle");
+
+
+        
 	}
 }

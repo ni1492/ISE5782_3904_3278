@@ -5,6 +5,8 @@ import geometries.Intersectable.GeoPoint;
 import lighting.LightSource;
 import primitives.*;
 import scene.*;
+
+import static java.lang.System.out;
 import static primitives.Util.alignZero;
 
 /**
@@ -13,14 +15,13 @@ import static primitives.Util.alignZero;
  *
  */
 public class RayTracerBasic extends RayTracerBase {
-	private static final double DELTA = 0.1;// how much to move from he object so the object wont make shadow on the point that's on it
-	private static final int MAX_CALC_COLOR_LEVEL = 3;
+	private static final int MAX_CALC_COLOR_LEVEL =10;
 	private static final double MIN_CALC_COLOR_K = 0.001;
 	private static final double INITIAL_K=1.0;
 
 	/**
 	 * constructor that receives a scene and construct the scene
-	 * 
+	 *  
 	 * @param scene Scene
 	 */
 	public RayTracerBasic(Scene scene) {
@@ -46,7 +47,6 @@ public class RayTracerBasic extends RayTracerBase {
 	private Color calcColor(GeoPoint point,Ray ray)
 	{
 		return calcColor(point, ray, MAX_CALC_COLOR_LEVEL,new Double3(INITIAL_K)).add(scene.ambientLight.getIntensity());
-	//	return this.scene.ambientLight.getIntensity().add((calcLocalEffects(point,ray)));
 	}
 	
 	/**
@@ -59,7 +59,7 @@ public class RayTracerBasic extends RayTracerBase {
 	 */
 	private Color calcColor(GeoPoint point,Ray ray, int level, Double3 k)
 	{
-		Color color= point.geometry.getEmission().add(calcLocalEffects(point,ray));
+		Color color=calcLocalEffects(point,ray);
 		return level==1? color: color.add(calcGlobalEffects(point,ray, level, k));
 	}
 	
@@ -67,30 +67,31 @@ public class RayTracerBasic extends RayTracerBase {
 	 * helper function for calcColor- calculate the effects of the reflection and the refraction on the point
 	 * @param point Point: the point to check the color
 	 * @param ray Ray: the ray that intersects with the point
-	 * @param level
+	 * @param level: the times left to call calcColor again
 	 * @param k
 	 * @return
 	 */
 	private Color calcGlobalEffects(GeoPoint point, Ray ray, int level, Double3 k) {
-		Color color=scene.background;
+		Color color=Color.BLACK;
+		Vector n=point.geometry.getNormal(point.point);
+		
 		Double3 kr=point.geometry.getMaterial().kR;
 		Double3 kkr=k.product(kr);
 		if(!kkr.lowerThan(MIN_CALC_COLOR_K)) {
-			Ray reflectedRay=constructReflectionRay(point.point, ray.getDir(),point.geometry.getNormal(point.point));
-			GeoPoint p=findClosestIntersection(reflectedRay);
-			if(p!=null)
-				color=color.add(calcColor(p,reflectedRay,level-1,kkr).scale(kr));
+			color=calcGlobalEffect(constructReflectionRay(point.point, ray.getDir(),n),level, kr,kkr);
 		}
 		Double3 kt=point.geometry.getMaterial().kT;
 		Double3 kkt=k.product(kt);
 		if(!kkt.lowerThan(MIN_CALC_COLOR_K)) {
-			Ray refractedRay=constructRefractionRay(point.point, ray.getDir(),point.geometry.getNormal(point.point));
-			GeoPoint p=findClosestIntersection(refractedRay);
-			if(p!=null)
-				color=color.add(calcColor(p,refractedRay,level-1,kkt).scale(kt));
+			color=color.add(calcGlobalEffect(constructRefractionRay(point.point,ray.getDir(),n),level,kt,kkt));
 		}
 
 		return color;
+	}
+	
+	private Color calcGlobalEffect(Ray ray, int level, Double3 kx, Double3 kkx) {
+		GeoPoint p=findClosestIntersection(ray);
+		return (p==null? scene.background: calcColor(p,ray,level-1,kkx).scale(kx));
 	}
 
 	/**
@@ -160,17 +161,17 @@ public class RayTracerBasic extends RayTracerBase {
 	 * @return if there is an object between the point to the source light
 	 */
 	private boolean unshaded(GeoPoint gp, Vector l, Vector n, LightSource light, double nv) {
-		Vector lightDir=l.scale(-1);//turn the vector- from the point to the light
-		Vector deltaVector=n.scale(nv<0 ? DELTA : -DELTA);//the vector from the original point towards the normal
-		//move it closer to the light source- short if 
-		Point point=gp.point.add(deltaVector);//raises the point from the object
-		Ray lightRay=new Ray(point,lightDir);//new ray from the new point to the light source
-		double length=light.getDistance(point);//helper function to find the distance from the light to the point 
+		Ray lightRay=new Ray(gp.point,l.scale(-1),n);//new ray from the new point to the light source
+		//turn the vector l- from the point to the light  of te vector from the light to the point
+		double length=light.getDistance(lightRay.getP0());//helper function to find the distance from the light to the point 
+
 		List<GeoPoint> intersections=this.scene.geometries.findGeoIntersections(lightRay,length);
 		if(intersections==null)
 			return true;
+		//Double3 ktr=1;
 		for(GeoPoint p: intersections)
 		{
+			//ktr=ktr*p.geometry.getMaterial().kT;
 			if(p.geometry.getMaterial().kT.equals(Double3.ZERO))
 				return false;
 				
@@ -204,12 +205,8 @@ public class RayTracerBasic extends RayTracerBase {
 	 * @return the reflection ray
 	 */
 	private Ray constructReflectionRay(Point point, Vector v, Vector n) {
-		double nv=alignZero(n.dotProduct(v));
-		Vector deltaVector=n.scale(nv>0 ? DELTA : -DELTA);//the vector from the original point towards the normal
-		Point p=point.add(deltaVector);//raises the point from the object
-		Vector r=v.subtract(n.scale(2*nv));
-		return new Ray(p,r);
-
+		Ray ray= new Ray(point,v,n);
+		return new Ray(point,v.subtract(n.scale(2*n.dotProduct(v))),n);
 	}
 	/**
 	 * construct the refracted ray 
@@ -218,11 +215,8 @@ public class RayTracerBasic extends RayTracerBase {
 	 * @param n - vector normal
 	 * @return the refraction ray
 	 */
-	private Ray constructRefractionRay(Point point, Vector v, Vector n) {
-		double nv=alignZero(n.dotProduct(v));
-		Vector deltaVector=n.scale(nv>0 ? DELTA : -DELTA);//the vector from the original point towards the normal
-		Point p=point.add(deltaVector);//raises the point from the object
-		return new Ray(p,v);
-
+	private Ray constructRefractionRay(Point point, Vector v, Vector n) { 
+		return new Ray(point,v,n); 
 	}
 }
+

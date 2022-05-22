@@ -20,7 +20,7 @@ public class Plane extends Geometry
 	public Plane(Point q0, Vector normal) 
 	{
 		this.q0 = q0;
-		this.normal = normal;
+		this.normal = normal.normalize(); 
 	}
 	/**
 	 * plane class constructor - gets three points that are on the plane
@@ -83,7 +83,6 @@ public class Plane extends Geometry
 	@Override
 	public List<Point> findIntersections(Ray ray) 
 	{
-		
 		//preparing the correct vectors and point for later calculations:
 		 Point P0 = ray.getP0();
 	     Vector v = ray.getDir();
@@ -126,12 +125,16 @@ public class Plane extends Geometry
 	    
 	    }
 	protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
+//		 System.out.println("intersect plane");
+
 		//preparing the correct vectors and point for later calculations:
 		 Point P0 = ray.getP0();
 	     Vector v = ray.getDir();
 	     Vector n = normal;
 	     double nv = n.dotProduct(v);
 	     
+//		 System.out.println(nv);
+
 		
 		// if the ray is lying in the plane or orthogonal - return null (infinite points)
 	     if(isZero(nv))
@@ -142,20 +145,25 @@ public class Plane extends Geometry
 	     //if the ray starts from the plane - return the point (1 points)
 	     if(q0.equals(P0))
 	     {
-	    	 return List.of(new GeoPoint(this,q0));
+	    	 return null;
+	    	// return List.of(new GeoPoint(this,q0));
 	     }
 	     
 	     Vector q0minusP0 = q0.subtract(P0);
 	     double nQ0minusP0  = n.dotProduct(q0minusP0);
+//		 System.out.println(nQ0minusP0);
+
 	     
 	     // if the ray is parallel to the plane - return null (0 points)
 	     if (nQ0minusP0==0)
 	     {
-	    	 return List.of(new GeoPoint(this,ray.getP0()));
+	    	 return null;
+	    	// return List.of(new GeoPoint(this,ray.getP0()));
 	     }
 	     
 	     double  t = nQ0minusP0/nv;
-	     
+//		 System.out.println(t);
+
 	     if (t <0) //no intersection - return null (0 points)
 	     {
 	         return  null;
@@ -165,6 +173,8 @@ public class Plane extends Geometry
 	     //return the point of intersection (1 point)
 	     Point point = ray.getPoint(t);
 	     if(point.distance(ray.getP0())<=maxDistance) {
+//			 System.out.println("new intersection point");
+//			 System.out.println(point);
 	    	 return List.of(new GeoPoint(this,point));
 	     }
 	     return null;

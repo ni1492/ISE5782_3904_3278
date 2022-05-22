@@ -25,7 +25,7 @@ public class Triangle extends Polygon
 	}
 	@Override
 	public String toString() {
-		return "" ;
+		return ""+this.vertices.get(0)+this.vertices.get(1)+this.vertices.get(2) ;
 	}
 	@Override
 	public Vector getNormal(Point point)
@@ -56,7 +56,7 @@ public class Triangle extends Polygon
 			v1=point.subtract(b);
 			v2=point.subtract(c);
 		}
-		return v1.crossProduct(v2);
+		return v1.crossProduct(v2).normalize();
 	}
 	@Override
 	public List<Point> findIntersections(Ray ray) 
@@ -108,7 +108,7 @@ public class Triangle extends Polygon
 						else {
 							for(GeoPoint point: list)
 							{
-								if(point.point.distance(ray.getP0())<=maxDistance ) {
+								if(point.point.distance(ray.getP0())<=maxDistance) {
 									result.add(new GeoPoint(this,point.point));
 								}
 							}
