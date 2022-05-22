@@ -112,4 +112,38 @@ public class ReflectionRefractionTests {
 				camera.writeToImage();
 	}
 
+	@Test
+	public void multiShapes() {
+		Camera camera = new Camera(new Point(-8000, 0, 8000), new Vector(1, 0, 1), new Vector(1, 0, -1)) //
+				.setVPSize(2500, 2500).setVPDistance(10000); //
+		
+		scene.setAmbientLight(new AmbientLight(new Color(100,100,200), 0.3));
+
+		scene.geometries.add( //
+				new Sphere(new Point(500, 0, -400), 200d).setEmission(new Color(0, 0, 100)) //
+						.setMaterial(new Material().setKd(0.2).setKs(0.8).setShininess(30).setKt(0.8)),
+				new Triangle(new Point(-1000, -1500, -1500), new Point(500, -700, -1500), new Point(700, -1200, 1500)) //
+						.setEmission(new Color(20, 20, 20)) //A B C
+						.setMaterial(new Material().setKr(1).setKs(1.0).setShininess(200)),
+				new Triangle(new Point(-1000, 1500, -1500), new Point(500, 700, -1500), new Point(700, 1200, 1500)) //
+						.setEmission(new Color(20, 20, 20)) // 
+						.setMaterial(new Material().setKr(1)),
+				new Triangle(new Point(1500, -1000, -1500), new Point(1500, 1000, -1500), new Point(-1500, 0, -1000)) //
+					.setEmission(new Color(20, 20, 20)) //
+					.setMaterial(new Material().setKr(0.5)),
+				new Triangle(new Point(1500, -1000, -1500), new Point(1500, 1000, -1500), new Point(1500, 0, 1000)) //
+					.setEmission(new Color(20, 20, 20)) //
+					.setMaterial(new Material().setKr(0.5)));
+
+		scene.lights.add(new DirectionalLight(new Color(100, 600, 200), new Vector(0, 0, -1)));
+		scene.lights.add(new SpotLight(new Color(300, 300, 0),new Point(700,-1200,1500), new Vector(-1, 2, -1)));
+		scene.lights.add(new SpotLight(new Color(300, 300, 0),new Point(700,1200,1500), new Vector(-1, -2, -1)));
+
+		ImageWriter imageWriter = new ImageWriter("multiShapes", 500, 500);
+		camera.setWriter(imageWriter) //
+				.setRayTracerBasic(new RayTracerBasic(scene)) //
+				.renderImage(); //
+				camera.writeToImage();
+	}
+
 }
