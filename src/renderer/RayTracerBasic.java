@@ -11,8 +11,6 @@ import static primitives.Util.alignZero;
 
 /**
  * finding the color of the pixels
- * 
- *
  */
 public class RayTracerBasic extends RayTracerBase {
 	private static final int MAX_CALC_COLOR_LEVEL =10;
@@ -21,7 +19,6 @@ public class RayTracerBasic extends RayTracerBase {
 
 	/**
 	 * constructor that receives a scene and construct the scene
-	 *  
 	 * @param scene Scene
 	 */
 	public RayTracerBasic(Scene scene) {
@@ -30,7 +27,6 @@ public class RayTracerBasic extends RayTracerBase {
 
 	/**
 	 * calculate the color of the intersection of the ray with the objects
-	 * 
 	 * @param r Ray: the ray that intersects with objects
 	 * @return the color of the intersection
 	 */
@@ -52,14 +48,14 @@ public class RayTracerBasic extends RayTracerBase {
 	/**
 	 * return the color of the point depends on the lightning around
 	 * @param point Point: the point to check the color
-	 * @param ray
-	 * @param level
-	 * @param k
-	 * @return
+	 * @param ray: the ray that directed to the point
+	 * @param level: the amount of times that left to continue the recoursion
+	 * @param k: the intensity of the light 
+	 * @return the color of the point
 	 */
 	private Color calcColor(GeoPoint point,Ray ray, int level, Double3 k)
 	{
-		Color color=calcLocalEffects(point,ray);
+		Color color=calcLocalEffects(point,ray,k);
 		return level==1? color: color.add(calcGlobalEffects(point,ray, level, k));
 	}
 	
@@ -68,8 +64,8 @@ public class RayTracerBasic extends RayTracerBase {
 	 * @param point Point: the point to check the color
 	 * @param ray Ray: the ray that intersects with the point
 	 * @param level: the times left to call calcColor again
-	 * @param k
-	 * @return
+	 * @param k: the intensity of light in the point
+	 * @return the color effects from other objects in the scene
 	 */
 	private Color calcGlobalEffects(GeoPoint point, Ray ray, int level, Double3 k) {
 		Color color=Color.BLACK;
@@ -100,7 +96,7 @@ public class RayTracerBasic extends RayTracerBase {
 	 * @param ray Ray: the ray that intersects with the point
 	 * @return the color that the lights adds to the point
 	 */
-	private Color calcLocalEffects(GeoPoint point,Ray ray) {
+	private Color calcLocalEffects(GeoPoint point,Ray ray, Double3 k) {
 		Color color=point.geometry.getEmission();
 		Vector v=ray.getDir();
 		Vector n=point.geometry.getNormal(point.point).normalize();
@@ -115,8 +111,10 @@ public class RayTracerBasic extends RayTracerBase {
 			double nl=alignZero(n.dotProduct(l));
 			if(nl*nv>0)//sign(nl)==sign(nv)
 			{
-				if(unshaded(point, l, n, light, nv)) {
-					Color iL=light.getIntensity(point.point);
+//				if(unshaded(point, l, n, light, nv)) {
+				Double3 ktr=transparency(point,light,l,n);
+				if(!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
+				Color iL=light.getIntensity(point.point).scale(ktr);
 					color=color.add(iL.scale(calcDiffusive(material,nl)),iL.scale(calcSpecular(material,n,l,nl,v)));
 				}
 				}
@@ -154,6 +152,7 @@ public class RayTracerBasic extends RayTracerBase {
 	}
 	
 	/**
+	 * Deprecated function! no longer in use.
 	 * checks if there is an object that make shadow on the point
 	 * @param gp - the point on the geometry: GeoPoint
 	 * @param l - the vector from the light to the point: Vector
@@ -168,10 +167,8 @@ public class RayTracerBasic extends RayTracerBase {
 		List<GeoPoint> intersections=this.scene.geometries.findGeoIntersections(lightRay,length);
 		if(intersections==null)
 			return true;
-		//Double3 ktr=1;
 		for(GeoPoint p: intersections)
 		{
-			//ktr=ktr*p.geometry.getMaterial().kT;
 			if(p.geometry.getMaterial().kT.equals(Double3.ZERO))
 				return false;
 				
@@ -185,6 +182,30 @@ public class RayTracerBasic extends RayTracerBase {
 		
 		return true;
 	}
+	
+	/**
+	 * the function find the intensity of the light that affect the object- if there are other objects that might stop some of the light
+	 * @param gp - the point on the geometry: GeoPoint
+	 * @param light - the source light that affect the object: LightSource
+	 * @param l - the vector from the light to the point: Vector
+	 * @param n - the normal to the point: Vector 
+	 * @return the intensity of the light on the point
+	 */
+	private Double3 transparency(GeoPoint gp, LightSource light, Vector l, Vector n) {
+		Ray lightRay=new Ray(gp.point,l.scale(-1),n);//new ray from the new point to the light source
+		//turn the vector l- from the point to the light  of te vector from the light to the point
+		double length=light.getDistance(lightRay.getP0());//helper function to find the distance from the light to the point 
+		List<GeoPoint> intersections=this.scene.geometries.findGeoIntersections(lightRay,length);
+		if(intersections==null)
+			return Double3.ONE;
+		Double3 ktr=Double3.ONE;
+		for(GeoPoint p: intersections)
+		{
+			ktr=ktr.product(p.geometry.getMaterial().kT);
+		}
+		return ktr;
+	}
+	
 	/**
 	 * find the closest intersection to the ray 
 	 * @param ray - Ray

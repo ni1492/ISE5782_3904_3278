@@ -35,7 +35,6 @@ public class Ray {
 
 	/**
 	 * return the diraction of the ray
-	 * 
 	 * @return vector diraction 
 	 */
 	public Vector getDir() {
@@ -44,7 +43,6 @@ public class Ray {
 
 	/**
 	 * return the starting point of the ray
-	 * 
 	 * @return point P0
 	 */
 	public Point getP0() {
@@ -53,7 +51,6 @@ public class Ray {
 
 	/**
 	 * ray class constructor
-	 * 
 	 * @param p0  receives a point
 	 * @param dir receives a vector
 	 */
@@ -65,10 +62,9 @@ public class Ray {
 	/**
 	 * constructor that gets the strarting point, the vector and the normal' and
 	 * create a new ray that raises the starting point
-	 * 
 	 * @param point - origin starting point: Point
-	 * @param v     - the direction of the ray: Vector
-	 * @param n     - the normal to the point: Vector
+	 * @param v - the direction of the ray: Vector
+	 * @param n - the normal to the point: Vector
 	 */
 	public Ray(Point point, Vector v, Vector n) {
 		double nv = alignZero(n.dotProduct(v));
@@ -78,9 +74,7 @@ public class Ray {
 	}
 
 	/**
-	 * return the point from multiplying the ray by delta and adding it to the
-	 * current P0
-	 * 
+	 * return the point from multiplying the ray by delta and adding it to the current P0
 	 * @param delta double number
 	 * @return the new point
 	 */
@@ -94,7 +88,6 @@ public class Ray {
 	/**
 	 * Deprecated function! no longer in use. gets a list of points and return the
 	 * closest point to the starting point
-	 * 
 	 * @param points list of points
 	 * @return the closest point
 	 */
