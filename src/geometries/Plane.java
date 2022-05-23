@@ -125,7 +125,6 @@ public class Plane extends Geometry
 	    
 	    }
 	protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
-//		 System.out.println("intersect plane");
 
 		//preparing the correct vectors and point for later calculations:
 		 Point P0 = ray.getP0();
@@ -133,7 +132,6 @@ public class Plane extends Geometry
 	     Vector n = normal;
 	     double nv = n.dotProduct(v);
 	     
-//		 System.out.println(nv);
 
 		
 		// if the ray is lying in the plane or orthogonal - return null (infinite points)
@@ -145,13 +143,12 @@ public class Plane extends Geometry
 	     //if the ray starts from the plane - return the point (1 points)
 	     if(q0.equals(P0))
 	     {
-	    	 return null;
-	    	// return List.of(new GeoPoint(this,q0));
+//	    	 return null;
+	    	 return List.of(new GeoPoint(this,q0));
 	     }
 	     
 	     Vector q0minusP0 = q0.subtract(P0);
 	     double nQ0minusP0  = n.dotProduct(q0minusP0);
-//		 System.out.println(nQ0minusP0);
 
 	     
 	     // if the ray is parallel to the plane - return null (0 points)
@@ -162,7 +159,6 @@ public class Plane extends Geometry
 	     }
 	     
 	     double  t = nQ0minusP0/nv;
-//		 System.out.println(t);
 
 	     if (t <0) //no intersection - return null (0 points)
 	     {
@@ -173,8 +169,6 @@ public class Plane extends Geometry
 	     //return the point of intersection (1 point)
 	     Point point = ray.getPoint(t);
 	     if(point.distance(ray.getP0())<=maxDistance) {
-//			 System.out.println("new intersection point");
-//			 System.out.println(point);
 	    	 return List.of(new GeoPoint(this,point));
 	     }
 	     return null;

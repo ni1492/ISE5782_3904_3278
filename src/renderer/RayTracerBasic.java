@@ -84,7 +84,14 @@ public class RayTracerBasic extends RayTracerBase {
 
 		return color;
 	}
-	
+	/**
+	 * calls the calColor for the dipper level
+	 * @param ray: the new ray from the last point- Ray
+	 * @param level: the times left to call calcColor again- int
+	 * @param kx: kr or kt, the k for this level- Double3
+	 * @param kkx: kkr or kkt, the k for the next level- Double3
+	 * @return the color of the point in this level
+	 */
 	private Color calcGlobalEffect(Ray ray, int level, Double3 kx, Double3 kkx) {
 		GeoPoint p=findClosestIntersection(ray);
 		return (p==null? scene.background: calcColor(p,ray,level-1,kkx).scale(kx));

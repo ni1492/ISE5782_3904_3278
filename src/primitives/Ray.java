@@ -60,8 +60,8 @@ public class Ray {
 	}
 
 	/**
-	 * constructor that gets the strarting point, the vector and the normal' and
-	 * create a new ray that raises the starting point
+	 * constructor that gets the starting point, the vector and the normal, and
+	 * ]create a new ray that raises the starting point
 	 * @param point - origin starting point: Point
 	 * @param v - the direction of the ray: Vector
 	 * @param n - the normal to the point: Vector
