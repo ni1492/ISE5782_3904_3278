@@ -110,6 +110,7 @@ public class Sphere extends Geometry
 			return null;
 		Point p2=ray.getPoint(tm-th);
 		
+		//bonus- checks if the points are close enough to the ray's starting point
 		if(p1.distance(ray.getP0())<=maxDistance && p2.distance(ray.getP0())<=maxDistance ) {
 			return List.of(new GeoPoint(this,p2),new GeoPoint(this,p1));
 		}

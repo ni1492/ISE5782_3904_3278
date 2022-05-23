@@ -84,7 +84,7 @@ public abstract class Intersectable
 		return findGeoIntersectionsHelper(ray, Double.POSITIVE_INFINITY);
 	}
 	/**
-	 * 
+	 * BONUS: max distance
 	 * the func gets ray and returns list of intersections with the geometry NVI pattern
 	 * @param ray type- the ray that intersects with the shape
 	 * @param maxDistance - double distance
