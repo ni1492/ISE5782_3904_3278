@@ -13,6 +13,19 @@ import static primitives.Util.*;
 public class Double3 {
 	final double d1;
 	final double d2;
+	
+	public double getD1() {
+		return d1;
+	}
+
+	public double getD2() {
+		return d2;
+	}
+
+	public double getD3() {
+		return d3;
+	}
+
 	final double d3;
 
 	/**

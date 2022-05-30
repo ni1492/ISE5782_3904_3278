@@ -16,6 +16,8 @@ public class RayTracerBasic extends RayTracerBase {
 	private static final int MAX_CALC_COLOR_LEVEL =10;
 	private static final double MIN_CALC_COLOR_K = 0.001;
 	private static final double INITIAL_K=1.0;
+	private static final double ACCURACY=0.25;
+	private static final boolean improvment=false;
 
 	/**
 	 * constructor that receives a scene and construct the scene
@@ -93,8 +95,37 @@ public class RayTracerBasic extends RayTracerBase {
 	 * @return the color of the point in this level
 	 */
 	private Color calcGlobalEffect(Ray ray, int level, Double3 kx, Double3 kkx) {
-		GeoPoint p=findClosestIntersection(ray);
-		return (p==null? scene.background: calcColor(p,ray,level-1,kkx).scale(kx));
+		GeoPoint p=findClosestIntersection(ray); // 
+		if(improvment){
+			if(p==null)
+				return scene.background;
+			Color ans=Color.BLACK;
+			int num=1;
+			Double3 d=ray.getDir().getXyz();
+			Vector dir1=new Vector(new Double3(1,0,(-d.getD1()/d.getD3()))).normalize();
+			Vector dir2=ray.getDir().crossProduct(dir1).normalize();
+			double gap=ACCURACY/3;
+			Point startGrid=dir1.scale(2).add(dir2.scale(-2));
+			Point temp;
+			GeoPoint newP;
+			
+			for(int i=1;i<3;i++){
+				for(int j=1;j<3;j++){
+					temp=startGrid.add(dir1.scale(i*gap)).add(dir2.scale(j*gap));
+					if(startGrid.distance(temp)<=ACCURACY){
+						Ray newRay=new Ray(ray.getP0(),temp.subtract(ray.getP0()));
+						newP=findClosestIntersection(newRay);
+						if(newP!=null){
+							num++;
+							ans=ans.add(calcColor(newP,newRay,level-1,kkx));
+						}
+					}
+				}
+			}
+			return ans.scale(kx).reduce(num);
+		}
+		else
+			return (p==null? scene.background: calcColor(p,ray,level-1,kkx).scale(kx));
 	}
 
 	/**
