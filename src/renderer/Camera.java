@@ -17,6 +17,7 @@ public class Camera {
 	private double distance;
 	private ImageWriter writer;
 	private RayTracerBasic rayTracer;
+	private static final boolean multiThreading=true;
 
 	/**
 	 * constructor (calculate the vector vRight
@@ -120,54 +121,42 @@ public class Camera {
 	 * creating the image in the writer
 	 */ 
 	public void renderImage() {
-//		if (location == null || vRight == null || vUp == null || vTo == null || writer == null || rayTracer == null
-//				|| Double.isNaN(height) || Double.isNaN(width) || Double.isNaN(distance))
-//			throw new MissingResourceException("not all the fields are set", null, null);
-//		Color color;
-//		Pixel.initialize(writer.getNy(), writer.getNx(), 1);
-//		for (int i = 0; i < writer.getNx(); i++) {
-//			for (int j = 0; j < writer.getNy(); j++) {
-//				color = rayTracer.traceRay(this.constructRay(writer.getNx(), writer.getNy(), j, i));
-//				writer.writePixel(j, i, color);
-//				Pixel.pixelDone();
-//				 Pixel.printPixel();
-//				if(j%100==0)
-//					writer.writeToImage();
-//			}
-//		}
-		
-		if (location == null || vRight == null || vUp == null || vTo == null || writer == null || rayTracer == null
-				|| Double.isNaN(height) || Double.isNaN(width) || Double.isNaN(distance))
-			throw new MissingResourceException("not all the fields are set", null, null);
-		Color color;
-		for (int i = 0; i < writer.getNx(); i++) {
-			for (int j = 0; j < writer.getNy(); j++) {
-				color = rayTracer.traceRay(this.constructRay(writer.getNx(), writer.getNy(), j, i));
-				writer.writePixel(j, i, color);
-				if(j%100==0)
-					writer.writeToImage();
+		if(multiThreading)
+		{
+			if (location == null || vRight == null || vUp == null || vTo == null || writer == null || rayTracer == null
+					|| Double.isNaN(height) || Double.isNaN(width) || Double.isNaN(distance))
+				throw new MissingResourceException("not all the fields are set", null, null);
+			Color color;
+			Pixel.initialize(writer.getNy(), writer.getNx(), 1);
+			for (int i = 0; i < writer.getNx(); i++) {
+				for (int j = 0; j < writer.getNy(); j++) {
+					color = rayTracer.traceRay(this.constructRay(writer.getNx(), writer.getNy(), j, i));
+					writer.writePixel(j, i, color);
+					Pixel.pixelDone();
+					 Pixel.printPixel();
+					if(j%100==0)
+						writer.writeToImage();
+				}
 			}
+		}
+		else
+		{
+			if (location == null || vRight == null || vUp == null || vTo == null || writer == null || rayTracer == null
+					|| Double.isNaN(height) || Double.isNaN(width) || Double.isNaN(distance))
+				throw new MissingResourceException("not all the fields are set", null, null);
+			Color color;
+			for (int i = 0; i < writer.getNx(); i++) {
+				for (int j = 0; j < writer.getNy(); j++) {
+					color = rayTracer.traceRay(this.constructRay(writer.getNx(), writer.getNy(), j, i));
+					writer.writePixel(j, i, color);
+					if(j%100==0)
+						writer.writeToImage();
+				}
+			}
+	
 		}
 	}
 	
-	public void renderImageMultiThreading() {
-		if (location == null || vRight == null || vUp == null || vTo == null || writer == null || rayTracer == null
-				|| Double.isNaN(height) || Double.isNaN(width) || Double.isNaN(distance))
-			throw new MissingResourceException("not all the fields are set", null, null);
-		Color color;
-		Pixel.initialize(writer.getNy(), writer.getNx(), 1);
-		for (int i = 0; i < writer.getNx(); i++) {
-			for (int j = 0; j < writer.getNy(); j++) {
-				color = rayTracer.traceRay(this.constructRay(writer.getNx(), writer.getNy(), j, i));
-				writer.writePixel(j, i, color);
-				Pixel.pixelDone();
-				 Pixel.printPixel();
-				if(j%100==0)
-					writer.writeToImage();
-			}
-		}
-	}
-
 	/**
 	 * create a grid for the image
 	 * 
