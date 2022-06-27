@@ -17,9 +17,9 @@ public class RayTracerBasic extends RayTracerBase {
 	private static final int MAX_CALC_COLOR_LEVEL =10;
 	private static final double MIN_CALC_COLOR_K = 0.001;
 	private static final double INITIAL_K=1.0;
-	private static final double ACCURACY=3;
-	private static final double RAYSQUARE=3;
-	private static final boolean improvment=true;
+	private static final double ACCURACY=7;
+	private static final double RAYS=7;
+	private static final boolean improvement=false;
 
 	/**
 	 * constructor that receives a scene and construct the scene
@@ -100,50 +100,52 @@ public class RayTracerBasic extends RayTracerBase {
 		GeoPoint p=findClosestIntersection(ray); // 
 		if(p==null)
 			return scene.background;
-		if(improvment){
-			Color ans=calcColor(p,ray,level-1,kkx);
+		if(improvement){//if we choose to use the improvement
+			
+			Color ans=calcColor(p,ray,level-1,kkx);//calc the color in the specific point
 			int num=1;
-			double gap=(double)ACCURACY/(RAYSQUARE*RAYSQUARE);
+			double gap=(double)ACCURACY/(RAYS);//the gap between each point in the grid
 			Double3 d=ray.getDir().getXyz();
+			//directions that orthogonal to the ray in the point (to create a plane that include the point- to find more point in the area)
 			Vector dir1=new Vector(new Double3(-1,-1,((d.getD1()+d.getD3())/d.getD2()))).normalize();
 			Vector dir2=ray.getDir().crossProduct(dir1).normalize();
 			Point startGrid=p.point;
 			Point temp;
 			Color c;
-			
-			for(int i=0;i<RAYSQUARE;i++){
-				for(int j=0;j<RAYSQUARE;j++){
-					if(i==0 && j!=0) {
+			//to make the target a grid
+			for(int i=0;i<RAYS/2d;i++){//goes over the points in the area of the original point to calc their color
+				for(int j=0;j<RAYS/2d;j++){
+					if(i==0 && j!=0) {//if the point is on one of the direction- we have 2 points +-direction for +-j
 						temp=startGrid.add(dir2.scale(-j*gap));
-						c=improvmentHelper(startGrid,temp,ray, level,kkx);
+						c=improvementHelper(startGrid,temp,ray, level,kkx);
 						if(c!=Color.BLACK) {
 							ans=ans.add(c);
 							temp=startGrid.add(dir2.scale(j*gap));
-							ans.add(improvmentHelper(startGrid,temp,ray, level,kkx));
+							ans.add(improvementHelper(startGrid,temp,ray, level,kkx));
 							num=num+2;
 						}
 					}
-					else if(j==0 && i!=0) {
+					else if(j==0 && i!=0) {//if the point is on one of the direction- we have 2 points +-direction for +-i
 						temp=startGrid.add(dir1.scale(-i*gap));
-						c=improvmentHelper(startGrid,temp,ray, level,kkx);
+						c=improvementHelper(startGrid,temp,ray, level,kkx);
 						if(c!=Color.BLACK) {
 							ans=ans.add(c);
 							temp=startGrid.add(dir1.scale(i*gap));
-							ans.add(improvmentHelper(startGrid,temp,ray, level,kkx));
+							ans.add(improvementHelper(startGrid,temp,ray, level,kkx));
 							num=num+2;
 						}
 		 			}
-					else if(j!=0 && i!=0){
+					else if(j!=0 && i!=0){//else there is 4 points- in each quarter for +-i,+-j
 						temp=startGrid.add(dir1.scale(i*gap)).add(dir2.scale(j*gap));
-						c=improvmentHelper(startGrid,temp,ray, level,kkx);
+						c=improvementHelper(startGrid,temp,ray, level,kkx);
 						if(c!=Color.BLACK) {
 							ans=ans.add(c);
 							temp=startGrid.add(dir1.scale(-i*gap)).add(dir2.scale(j*gap));
-							ans=ans.add(improvmentHelper(startGrid,temp,ray, level,kkx));
+							ans=ans.add(improvementHelper(startGrid,temp,ray, level,kkx));
 							temp=startGrid.add(dir1.scale(i*gap)).add(dir2.scale(-j*gap));
-							ans=ans.add(improvmentHelper(startGrid,temp,ray, level,kkx));
+							ans=ans.add(improvementHelper(startGrid,temp,ray, level,kkx));
 							temp=startGrid.add(dir1.scale(-i*gap)).add(dir2.scale(-j*gap));
-							ans=ans.add(improvmentHelper(startGrid,temp,ray, level,kkx));
+							ans=ans.add(improvementHelper(startGrid,temp,ray, level,kkx));
 							num=num+4;
 						}
 					}
@@ -155,8 +157,17 @@ public class RayTracerBasic extends RayTracerBase {
 			return calcColor(p,ray,level-1,kkx).scale(kx);
 	}
 	
-	private Color improvmentHelper(Point p0,Point p,Ray ray ,int level, Double3 kkx) {
-		if(p0.distance(p)<=ACCURACY){
+	/**
+	 * checks that the point is in the radius of the accuracy and finds the new ray to the new point and calls calcColor for that point 
+	 * @param p0 the original point
+	 * @param p the new point
+	 * @param ray the ray to the original point
+	 * @param level the level of recursion
+	 * @param kkx kkr or kkt, the k for the next level- Double3
+	 * @return the color of the points around the original point
+	 */
+	private Color improvementHelper(Point p0,Point p,Ray ray ,int level, Double3 kkx) {
+		if(p0.distance(p)<=ACCURACY){// to make the target a circle
 			Ray newRay=new Ray(ray.getP0(),p.subtract(ray.getP0()).normalize());
 			GeoPoint newP=findClosestIntersection(newRay);
 			if(newP!=null){
@@ -316,4 +327,3 @@ public class RayTracerBasic extends RayTracerBase {
 		return new Ray(point,v,n); 
 	}
 }
-
