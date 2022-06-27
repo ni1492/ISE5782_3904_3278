@@ -275,7 +275,7 @@ public class MiniPoroject1Test {
 		scene.geometries.add(new Sphere(new Point(153, -22, -5), 19d).setEmission(new Color(114,140,0)).setMaterial(bushM));
 		scene.geometries.add(new Sphere(new Point(240, -24, -5), 20d).setEmission(new Color(108,187,60)).setMaterial(bushM));
 
-		ImageWriter imageWriter = new ImageWriter("mountain", 700, 700);
+		ImageWriter imageWriter = new ImageWriter("mountain", 400, 400);
 		camera.setWriter(imageWriter) //
 				.setRayTracerBasic(new RayTracerBasic(scene)) //
 				.renderImage(); //
