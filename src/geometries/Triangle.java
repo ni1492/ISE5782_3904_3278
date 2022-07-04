@@ -2,6 +2,7 @@ package geometries;
 import java.util.ArrayList;
 import java.util.List;
 
+import geometries.Intersectable.BoundingBox;
 import geometries.Intersectable.GeoPoint;
 import primitives.*;
 import static primitives.Util.alignZero;
@@ -116,5 +117,26 @@ public class Triangle extends Polygon
 						return result;
 				}
 				return null;
+	}
+	
+	@Override
+	public void createBoundingBox() {
+		if (vertices == null)
+            return;
+        double minX = Double.POSITIVE_INFINITY;
+        double minY = Double.POSITIVE_INFINITY;
+        double minZ = Double.POSITIVE_INFINITY;
+        double maxX = Double.NEGATIVE_INFINITY;
+        double maxY = Double.NEGATIVE_INFINITY;
+        double maxZ = Double.NEGATIVE_INFINITY;
+        for (Point ver : vertices) {
+            minX = Math.min(minX, ver.getXyz().getD1());
+            minY = Math.min(minY, ver.getXyz().getD2());
+            minZ = Math.min(minZ, ver.getXyz().getD3());
+            maxX = Math.max(maxX, ver.getXyz().getD1());
+            maxY = Math.max(maxY, ver.getXyz().getD2());
+            maxZ = Math.max(maxZ, ver.getXyz().getD3());
+        }
+        box = new BoundingBox(new Point(minX, minY, minZ), new Point(maxX, maxY, maxZ));			
 	}
 }

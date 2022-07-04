@@ -277,6 +277,7 @@ public class MiniPoroject1Test {
 
 		ImageWriter imageWriter = new ImageWriter("mountain", 400, 400);
 		camera.setWriter(imageWriter) //
+		.setImprovments(true, true)
 				.setRayTracerBasic(new RayTracerBasic(scene)) //
 				.renderImage(); //
 				camera.writeToImage();

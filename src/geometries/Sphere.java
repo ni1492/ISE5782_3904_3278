@@ -20,6 +20,8 @@ public class Sphere extends Geometry
 	{
 		this.center = center;
 		this.radius = radius;
+		if(BVH)
+			createBoundingBox();	
 	}
 	
 	@Override
@@ -122,6 +124,18 @@ public class Sphere extends Geometry
 		}
 		return null;
 
+	}
+
+	@Override
+	public void createBoundingBox() {
+		double minX = center.getXyz().getD1() - radius;
+        double minY = center.getXyz().getD2() - radius;
+        double minZ = center.getXyz().getD3() - radius;
+        double maxX = center.getXyz().getD1() + radius;
+        double maxY = center.getXyz().getD2() + radius;
+        double maxZ = center.getXyz().getD3() + radius;
+        box = new BoundingBox(new Point(minX, minY, minZ), new Point(maxX, maxY, maxZ));
+    		
 	}
 	
 	
