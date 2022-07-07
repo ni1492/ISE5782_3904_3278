@@ -17,9 +17,9 @@ public class RayTracerBasic extends RayTracerBase {
 	private static final int MAX_CALC_COLOR_LEVEL =10;
 	private static final double MIN_CALC_COLOR_K = 0.001;
 	private static final double INITIAL_K=1.0;
-	private static final double ACCURACY=7;
-	private static final double RAYS=7;
-	private static final boolean improvement=false;
+	private static final double ACCURACY=3;
+	private static final double RAYS=3;
+	private static boolean improvement=true;
 
 	/**
 	 * constructor that receives a scene and construct the scene
@@ -325,5 +325,9 @@ public class RayTracerBasic extends RayTracerBase {
 	 */
 	private Ray constructRefractionRay(Point point, Vector v, Vector n) { 
 		return new Ray(point,v,n); 
+	}
+	
+	public void setImprovement(boolean glossy) {
+		this.improvement=glossy;
 	}
 }

@@ -13,6 +13,8 @@ private ArrayList<Intersectable> list;
 	 * default constructor
 	 */
 	public Geometries() {
+		if(BVH)
+			createBoundingBox();
 		list = new ArrayList<Intersectable>();
 	}
 	/**
@@ -21,6 +23,9 @@ private ArrayList<Intersectable> list;
 	 */
 	public Geometries(Intersectable... geometries)
 	{
+		if(BVH)
+		createBoundingBox();
+		
 		list = new ArrayList<Intersectable>();
 
 		for(Intersectable inter: geometries)
@@ -86,6 +91,28 @@ private ArrayList<Intersectable> list;
 			return null;
 		}
 		return result;
+	}
+	@Override
+	public void createBoundingBox() {
+		if (list == null)
+            return;
+        double minX = Double.POSITIVE_INFINITY;//Initialize
+        double minY = Double.POSITIVE_INFINITY;//Initialize
+        double minZ = Double.POSITIVE_INFINITY;//Initialize
+        double maxX = Double.NEGATIVE_INFINITY;//Initialize
+        double maxY = Double.NEGATIVE_INFINITY;//Initialize
+        double maxZ = Double.NEGATIVE_INFINITY;//Initialize
+        for (Intersectable geo : list) {
+            if (geo.box != null) {
+                minX = Math.min(minX, geo.box._minimums.getXyz().getD1());
+                minY = Math.min(minY, geo.box._minimums.getXyz().getD2());
+                minZ = Math.min(minZ, geo.box._minimums.getXyz().getD3());
+                maxX = Math.max(maxX, geo.box._maximums.getXyz().getD1());
+                maxY = Math.max(maxY, geo.box._maximums.getXyz().getD2());
+                maxZ = Math.max(maxZ, geo.box._maximums.getXyz().getD3());
+            }
+        }
+        box = new BoundingBox(new Point(minX, minY, minZ), new Point(maxX, maxY, maxZ));		
 	}
 
 

@@ -82,6 +82,9 @@ public class Polygon extends Geometry {
 				throw new IllegalArgumentException("All vertices must be ordered and the polygon must be convex");
 		}
 		size = vertices.length;
+		
+		if(BVH)
+			createBoundingBox();
 	}
 
 	@Override
@@ -99,5 +102,26 @@ public class Polygon extends Geometry {
 	protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void createBoundingBox() {
+		if (vertices == null)
+            return;
+        double minX = Double.POSITIVE_INFINITY;
+        double minY = Double.POSITIVE_INFINITY;
+        double minZ = Double.POSITIVE_INFINITY;
+        double maxX = Double.NEGATIVE_INFINITY;
+        double maxY = Double.NEGATIVE_INFINITY;
+        double maxZ = Double.NEGATIVE_INFINITY;
+        for (Point ver : vertices) {
+            minX = Math.min(minX, ver.getXyz().getD1());
+            minY = Math.min(minY, ver.getXyz().getD2());
+            minZ = Math.min(minZ, ver.getXyz().getD3());
+            maxX = Math.max(maxX, ver.getXyz().getD1());
+            maxY = Math.max(maxY, ver.getXyz().getD2());
+            maxZ = Math.max(maxZ, ver.getXyz().getD3());
+        }
+        box = new BoundingBox(new Point(minX, minY, minZ), new Point(maxX, maxY, maxZ));		
 	}
 }

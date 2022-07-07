@@ -11,6 +11,87 @@ import primitives.*;
  */
 public abstract class Intersectable 
 {
+	public static final boolean BVH=true;
+
+	/**
+	* class representing boundary box
+	*/
+	public class BoundingBox {
+		public Point _minimums;
+		public Point _maximums;
+		public BoundingBox(Point minimums, Point maximums) {
+			_minimums = minimums;
+			_maximums = maximums;
+			}
+	}
+	
+	public BoundingBox box;
+	
+	/**
+	* return true if ray intersects object
+	*
+	* @param ray ray to check
+	* @return whether ray intersects box
+	* code taken from scratchapixel.com
+	* https://www.scratchapixel.com/lessons/3d-basic-rendering/introductionacceleration-structure/bounding-volume-hierarchy-BVH-part1
+	*/
+	public boolean intersectingBoundingBox(Ray ray) {
+	 if (!BVH || box == null)
+		 return true;
+	 Vector dir = ray.getDir();
+	 Point p0 = ray.getP0();
+	 
+	 double xMin = (box._minimums.getXyz().getD1() - p0.getXyz().getD1()) / dir.getXyz().getD1();
+	 double xMax = (box._maximums.getXyz().getD1() - p0.getXyz().getD1()) / dir.getXyz().getD1();
+	
+	if (xMin > xMax) {
+		double temp = xMin;
+		xMin = xMax;
+		xMax = temp;
+	 }
+	 double yMin = (box._minimums.getXyz().getD2() - p0.getXyz().getD2()) / dir.getXyz().getD2();
+	 double yMax = (box._maximums.getXyz().getD2() - p0.getXyz().getD2()) / dir.getXyz().getD2();
+	
+	 if (yMin > yMax) {
+		 double temp = yMin;
+		 yMin = yMax;
+		 yMax = temp;
+	 }
+	 
+	 if ((xMin > yMax) || (yMin > xMax))
+		 return false;
+	
+	 if (yMin > xMin)
+		 xMin = yMin;
+	
+	 if (yMax < xMax)
+		 xMax = yMax;
+	
+	 double zMin = (box._minimums.getXyz().getD3() - p0.getXyz().getD3()) / dir.getXyz().getD3();
+	 double zMax = (box._maximums.getXyz().getD3() - p0.getXyz().getD3()) / dir.getXyz().getD3();
+	 if (zMin > zMax) {
+		 double temp = zMin;
+		 zMin = zMax;
+		 zMax = temp;
+	 }
+	 
+	 if ((xMin > zMax) || (zMin > xMax))
+		 return false;
+	 
+	 if (zMin > xMin)
+		 xMin = zMin;
+	
+	 if (zMax < xMax)
+		 xMax = zMax;
+	
+	 return true;
+	}
+
+	/**
+	 * create the boundary box for the objects
+	 */
+	public abstract void createBoundingBox();
+	
 	/**
 	 * Deprecated function! no longer in use.
 	 * the func gets ray and returns list of intersections with the geometry
@@ -81,6 +162,8 @@ public abstract class Intersectable
 	 * @return List of intersections GeoPoints with the shape
 	 */
 	public final  List<GeoPoint> findGeoIntersections(Ray ray){
+		if(BVH && !intersectingBoundingBox(ray))
+			return null;
 		return findGeoIntersectionsHelper(ray, Double.POSITIVE_INFINITY);
 	}
 	/**
@@ -103,7 +186,7 @@ public abstract class Intersectable
 	protected abstract List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance);
 
 	
-
+	
 }
 
 

@@ -19,6 +19,8 @@ public class Plane extends Geometry
 	 */
 	public Plane(Point q0, Vector normal) 
 	{
+		if(BVH)
+			createBoundingBox();
 		this.q0 = q0;
 		this.normal = normal.normalize(); 
 	}
@@ -30,6 +32,8 @@ public class Plane extends Geometry
 	 */
 	public Plane(Point q0,Point q1,Point q2) 
 	{
+		if(BVH)
+			createBoundingBox();
 		this.q0 = q0;
 		Vector a=q1.subtract(q0);
 		Vector b=q2.subtract(q0);
@@ -173,5 +177,10 @@ public class Plane extends Geometry
 	     }
 	     return null;
 	    	}
+	@Override
+	public void createBoundingBox() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

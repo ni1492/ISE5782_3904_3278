@@ -22,6 +22,8 @@ public class Tube extends Geometry
 	}
 	public Tube(Ray axisRay, double radius) 
 	{
+		if(BVH)
+			createBoundingBox();
 		this.axisRay = axisRay;
 		this.radius = radius;
 	}
@@ -43,6 +45,11 @@ public class Tube extends Geometry
 	protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	@Override
+	public void createBoundingBox() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
