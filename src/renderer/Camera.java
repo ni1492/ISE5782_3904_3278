@@ -132,7 +132,8 @@ public class Camera {
 			Pixel.initialize(writer.getNy(), writer.getNx(), 60);
 			IntStream.range(0, writer.getNy()).parallel().forEach(i->{
 				IntStream.range(0, writer.getNx()).parallel().forEach(j->{
-					writer.writePixel(j,i,rayTracer.traceRay(this.constructRay(writer.getNx(), writer.getNy(), j, i)));					Pixel.pixelDone();
+					writer.writePixel(j,i,rayTracer.traceRay(this.constructRay(writer.getNx(), writer.getNy(), j, i)));
+					Pixel.pixelDone();
 					Pixel.printPixel();
 				});
 			});
